@@ -20,7 +20,7 @@ PhotoMiner is here to help.
 
 PhotoMiner is a lightweight macOS utility that scans any directory — internal or external — for photographs. Simply drag and drop a folder into the app window or its Dock icon, and it will begin searching for images automatically.
 
-![Drag and drop folders into PhotoMiner](/assets/PhotoMiner/01_drop.png)
+![Drag and drop folders into PhotoMiner](/assets/images/PhotoMiner/01_drop.png)
 
 Photos are presented in chronological order, using EXIF metadata when available, or file creation dates as a fallback.
 
@@ -36,7 +36,7 @@ With PhotoMiner, you can:
 - Apply basic edits
 - Reveal files directly in Finder
 
-![Context menu with native macOS tools](/assets/PhotoMiner/02_contextmenu.png)
+![Context menu with native macOS tools](/assets/images/PhotoMiner/02_contextmenu.png)
 
 The interface is clean and intuitive, built to match the look and feel of macOS.
 
@@ -49,11 +49,11 @@ PhotoMiner automatically organizes your photos by month and year. Each group con
 This also simplifies cleaning up and organizing messy folders:
 just select a group, and drag & drop the photos to any destination you like.
 
-![Drag and drop photos to organize them](/assets/PhotoMiner/03_draganddrop1.png)
+![Drag and drop photos to organize them](/assets/images/PhotoMiner/03_draganddrop1.png)
 
-![Moving photos between folders](/assets/PhotoMiner/04_draganddrop2.png)
+![Moving photos between folders](/assets/images/PhotoMiner/04_draganddrop2.png)
 
-![Organizing photos by dragging to external apps](/assets/PhotoMiner/05_draganddrop3.png)
+![Organizing photos by dragging to external apps](/assets/images/PhotoMiner/05_draganddrop3.png)
 
 You can also drag thumbnails directly to an external editor or viewer — just drop them onto the Dock icon of your preferred app.
 
