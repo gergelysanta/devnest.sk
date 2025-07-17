@@ -10,6 +10,6 @@ Whether you have a question, want to report an issue, or simply share feedback, 
 
 For all product-related questions, bug reports, feature requests, or feedback, feel free to reach out via email:
 
-**Email:** [contact@devnest.sk](mailto:contact@devnest.sk)
+**Email:** [{{ site.email }}](mailto:{{ site.email }})
 
 We aim to respond to all messages within 1–2 business days.
