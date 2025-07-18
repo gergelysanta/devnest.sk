@@ -165,6 +165,43 @@
             position: relative; /* Added for badge positioning */
         }
         
+        .window-buttons {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        
+        .window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .window-button.close {
+            background-color: #ff5f57;
+            border: 1px solid #e0443e;
+        }
+        
+        .window-button.minimize {
+            background-color: #ffbd2e;
+            border: 1px solid #dea123;
+        }
+        
+        .window-button.maximize {
+            background-color: #28ca42;
+            border: 1px solid #1aab29;
+        }
+        
         h1, h2, h3, h4, h5, h6 {
             color: #1d1d1f;
             font-weight: 600;
@@ -273,6 +310,17 @@
                 position: relative; /* Keep relative positioning for badge */
             }
             
+            .window-buttons {
+                top: 11px;
+                left: 15px;
+                gap: 6px;
+            }
+            
+            .window-button {
+                width: 10px;
+                height: 10px;
+            }
+            
             .navbar {
                 padding: 0 10px;
                 flex-wrap: wrap;
@@ -337,6 +385,21 @@
             .container {
                 background-color: #2a2a2a;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            }
+            
+            .window-button.close {
+                background-color: #ff5f57;
+                border: 1px solid #e0443e;
+            }
+            
+            .window-button.minimize {
+                background-color: #ffbd2e;
+                border: 1px solid #dea123;
+            }
+            
+            .window-button.maximize {
+                background-color: #28ca42;
+                border: 1px solid #1aab29;
             }
             
             h1, h2, h3, h4, h5, h6 {
@@ -463,6 +526,11 @@
     
     <div class="main-content">
         <div class="container">
+            <div class="window-buttons">
+                <button class="window-button close" title="Close"></button>
+                <button class="window-button minimize" title="Minimize"></button>
+                <button class="window-button maximize" title="Maximize"></button>
+            </div>
             {% if page.title == "PhotoMiner" %}
             <div class="app-store-badge">
                 <a href="https://itunes.apple.com/us/app/photominer/id1227312629" target="_blank">
