@@ -1,6 +1,7 @@
 ---
 layout: default
 title: PhotoMiner
+# windowtitle: App
 permalink: /photominer/
 ---
 

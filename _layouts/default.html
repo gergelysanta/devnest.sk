@@ -167,7 +167,7 @@
         
         .window-buttons {
             position: absolute;
-            top: 16px;
+            top: 18px;
             left: 20px;
             display: flex;
             gap: 8px;
@@ -202,10 +202,30 @@
             border: 1px solid #1aab29;
         }
         
+        .window-title {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            z-index: 10;
+            white-space: nowrap;
+        }
+        
+        .window-header-separator {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 20px -20px 30px -20px;
+            margin-top: 6px;
+            height: 0;
+        }
+        
         h1, h2, h3, h4, h5, h6 {
             color: #1d1d1f;
             font-weight: 600;
-            margin-top: 2em;
+            margin-top: 1em;
             margin-bottom: 0.5em;
         }
         
@@ -321,6 +341,18 @@
                 height: 10px;
             }
             
+            .window-title {
+                top: 11px;
+                font-size: 14px;
+            }
+            
+            .window-header-separator {
+                margin-top: 26px;
+                margin-bottom: 25px;
+                margin-left: -20px;
+                margin-right: -20px;
+            }
+            
             .navbar {
                 padding: 0 10px;
                 flex-wrap: wrap;
@@ -400,6 +432,14 @@
             .window-button.maximize {
                 background-color: #28ca42;
                 border: 1px solid #1aab29;
+            }
+            
+            .window-title {
+                color: #e0e0e0;
+            }
+            
+            .window-header-separator {
+                border-top: 1px solid #444;
             }
             
             h1, h2, h3, h4, h5, h6 {
@@ -531,6 +571,10 @@
                 <button class="window-button minimize" title="Minimize"></button>
                 <button class="window-button maximize" title="Maximize"></button>
             </div>
+            <div class="window-title">
+                {% if page.windowtitle %}{{ page.windowtitle }}{% endif %}
+            </div>
+            <hr class="window-header-separator">
             {% if page.title == "PhotoMiner" %}
             <div class="app-store-badge">
                 <a href="https://itunes.apple.com/us/app/photominer/id1227312629" target="_blank">
