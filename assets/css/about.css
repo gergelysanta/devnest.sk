@@ -1,0 +1,48 @@
+/* About Page Specific Styles */
+
+/* Hide window header elements on about page */
+.container .window-buttons,
+.container .window-title,
+.container .window-header-separator {
+    display: none;
+}
+
+/* Adjust container padding without header */
+.container {
+    padding-top: 0;
+}
+
+/* Hero Image Styles */
+.about-hero-image {
+    position: relative;
+    width: 100vw !important;
+    max-width: calc(100% + 40px) !important;
+    height: auto;
+    margin-left: -20px !important;
+    margin-right: -20px !important;
+    margin-top: -56px !important;
+    border-radius: 12px 12px 0 0;
+    display: block;
+    /* border: 1px solid #007AFF; */
+}
+
+.about-hero-image.dark-mode {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .about-hero-image.light-mode {
+        display: none;
+    }
+    
+    .about-hero-image.dark-mode {
+        display: block;
+    }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .about-hero-image {
+        margin-top: -36px !important;
+    }
+}

@@ -1,10 +1,11 @@
 ---
 layout: default
-title: Welcome to DevNest
 permalink: /
+custom_css: about
 ---
 
-# Welcome to DevNest
+<img src="/assets/images/about/main.png" alt="DevNest" class="about-hero-image light-mode">
+<img src="/assets/images/about/main_dark.png" alt="DevNest" class="about-hero-image dark-mode">
 
 DevNest is a Slovakian based one-person software studio, dedicated to building high-quality macOS and iOS applications.
 

@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} - {% endif %}DevNest.sk</title>
+    
+    {% if page.custom_css %}
+    <!-- Page specific styles -->
+    <link rel="stylesheet" href="/assets/css/{{ page.custom_css }}.css">
+    {% endif %}
+    
     <style>
         * {
             box-sizing: border-box;
@@ -553,6 +559,7 @@
                 {% if page.windowtitle %}{{ page.windowtitle }}{% endif %}
             </div>
             <hr class="window-header-separator">
+            
             {% if page.title == "PhotoMiner" %}
             <div class="app-store-badge">
                 <a href="https://itunes.apple.com/us/app/photominer/id1227312629" target="_blank">
