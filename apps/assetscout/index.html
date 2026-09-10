@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- chrome:head -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>AssetScout — find the file when you know the date · DevNest</title>
+<meta name="description" content="AssetScout walks a folder and lays out every picture, video, recording and document it finds in the order they were made, grouped by month. Sandboxed, for macOS 14.4 and newer.">
+<link rel="canonical" href="https://devnest.sk/apps/assetscout/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DevNest">
+<meta property="og:title" content="AssetScout — find the file when you know the date · DevNest">
+<meta property="og:description" content="AssetScout walks a folder and lays out every picture, video, recording and document it finds in the order they were made, grouped by month. Sandboxed, for macOS 14.4 and newer.">
+<meta property="og:url" content="https://devnest.sk/apps/assetscout/">
+<meta property="og:image" content="https://devnest.sk/assets/img/brand/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://devnest.sk/assets/img/brand/og.png">
+
+<link rel="icon" href="/assets/img/brand/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/brand/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/img/brand/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/themes.css">
+
+<!-- The stored appearance is applied before the first paint, so a visitor who
+     chose dark never sees a white flash on the way in. -->
+<script>
+(function () {
+    try {
+        var stored = localStorage.getItem("appearance");
+        if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-appearance", stored);
+        }
+    } catch (e) { /* private browsing: fall back to the system setting */ }
+    document.documentElement.classList.add("js");
+})();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y0GKK6W0T"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8Y0GKK6W0T');
+</script>
+<!-- /chrome:head -->
+</head>
+
+<body data-app="assetscout">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- chrome:nav -->
+<header class="nav" data-nav>
+    <div class="wrap wrap--wide nav__inner">
+
+        <a class="brand" href="/">
+            <span class="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <rect class="mark__tile" x="1" y="1" width="30" height="30" rx="8"></rect>
+                    <path class="mark__arc mark__arc--1" d="M7.6 16A8.4 8.4 0 0 0 24.4 16"></path>
+                    <path class="mark__arc mark__arc--2" d="M10.6 16.8A5.4 5.4 0 0 0 21.4 16.8"></path>
+                    <circle class="mark__egg" cx="16" cy="14.8" r="3"></circle>
+                </svg>
+            </span>
+            <span class="brand__name">DevNest</span>
+            <span class="brand__sep" aria-hidden="true">/</span>
+            <span class="brand__product">AssetScout</span>
+        </a>
+
+        <nav class="nav__links" aria-label="Main">
+            <div class="menu" data-menu>
+                <button class="menu__btn is-current" type="button" aria-expanded="false" aria-controls="apps-menu">
+                    Apps<span class="chev" aria-hidden="true"></span>
+                </button>
+                <div class="menu__panel" id="apps-menu" hidden>
+            <a class="menu__row" href="/apps/tracktiv/">
+                <img class="menu__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">Tracktiv<em class="dot dot--beta"></em></span>
+                    <span class="menu__sub">Writes your working day down for you.</span>
+                </span>
+            </a>
+            <a class="menu__row is-current" href="/apps/assetscout/">
+                <img class="menu__icon" src="/assets/img/apps/assetscout/icon.svg" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">AssetScout<em class="dot dot--shipping"></em></span>
+                    <span class="menu__sub">Finds the file when you know the date, not the folder.</span>
+                </span>
+            </a>
+                </div>
+            </div>
+            <a href="/company/">Company</a>
+            <a href="/support/">Support</a>
+        </nav>
+
+        <button class="iconbtn appearance" type="button" data-appearance-toggle aria-label="Switch appearance">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.2"></circle>
+                <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"></path>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2z"></path>
+            </svg>
+            <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3.2" y="4.5" width="17.6" height="12" rx="2"></rect>
+                <path d="M8.4 20h7.2M12 16.5v3.5"></path>
+            </svg>
+        </button>
+
+        <button class="iconbtn burger" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav-sheet" aria-label="Menu">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <div class="sheet" id="nav-sheet" data-nav-sheet hidden>
+        <div class="wrap sheet__inner">
+            <p class="sheet__head">Apps</p>
+            <a class="menu__row" href="/apps/tracktiv/">
+                <img class="menu__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">Tracktiv<em class="dot dot--beta"></em></span>
+                    <span class="menu__sub">Writes your working day down for you.</span>
+                </span>
+            </a>
+            <a class="menu__row is-current" href="/apps/assetscout/">
+                <img class="menu__icon" src="/assets/img/apps/assetscout/icon.svg" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">AssetScout<em class="dot dot--shipping"></em></span>
+                    <span class="menu__sub">Finds the file when you know the date, not the folder.</span>
+                </span>
+            </a>
+            <p class="sheet__head">DevNest</p>
+            <a class="sheet__link" href="/company/">Company</a>
+            <a class="sheet__link" href="/support/">Support</a>
+            <a class="sheet__link" href="/privacy/">Privacy policy</a>
+        </div>
+    </div>
+</header>
+<!-- /chrome:nav -->
+
+<main id="main">
+
+<!-- ======================================================================
+     Hero
+     ====================================================================== -->
+
+<section class="hero">
+    <div class="wrap wrap--wide hero__inner">
+        <p class="eyebrow reveal">AssetScout for macOS</p>
+
+        <h1 class="h-display reveal" style="--delay: 60ms">
+            You know when you made it.<br>Not where you put it.
+        </h1>
+
+        <p class="hero__lead reveal" style="--delay: 140ms">
+            AssetScout walks a folder — or a whole drive — and lays out every picture, video,
+            recording and document it finds as a grid of thumbnails, in the order the content was
+            made. You look for the file by its date instead of by its folder.
+        </p>
+
+        <div class="cta-row hero__cta reveal" style="--delay: 220ms">
+            <!-- TODO: swap in the real product URL once the listing is live. -->
+            <a class="btn btn--primary" href="https://apps.apple.com/app/assetscout" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M16.4 12.7c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.8-3.1.8-.6 0-1.6-.7-2.7-.7-1.4 0-2.7.8-3.4 2-1.4 2.5-.4 6.2 1 8.2.7 1 1.5 2.1 2.5 2.1 1 0 1.4-.6 2.6-.6s1.5.6 2.6.6c1.1 0 1.8-1 2.4-2 .8-1.1 1.1-2.2 1.1-2.3 0 0-2.1-.8-2.1-3.2zM14.4 6.3c.6-.7 1-1.6.9-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.6-.9 2.5.9.1 1.8-.5 2.4-1.2z"></path>
+                </svg>
+                Download on the Mac App Store
+            </a>
+            <a class="btn btn--ghost" href="/apps/assetscout/docs/">Read the manual</a>
+        </div>
+
+        <p class="hero__facts reveal" style="--delay: 300ms">
+            <span>macOS 14.4 or newer</span>
+            <span>Sandboxed — it reads only what you hand it</span>
+            <span>No account, no sync, nothing uploaded</span>
+        </p>
+
+        <div class="hero__stage reveal reveal--rise" style="--delay: 380ms">
+            <div class="shot shot--free settle" data-range="14" style="--w: 1095px">
+                <picture>
+                    <source data-dark-source media="(prefers-color-scheme: dark)"
+                            srcset="/assets/img/apps/assetscout/window-dark.webp">
+                    <img src="/assets/img/apps/assetscout/window.webp"
+                         alt="AssetScout after a scan: a grid of photograph thumbnails under a heading reading 2026 August, 1 618 items, with the window title reading 1 765 of 8 198 items"
+                         width="2190" height="1728" fetchpriority="high">
+                </picture>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     The problem it is for
+     ====================================================================== -->
+
+<section class="section section--alt" id="why">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left">
+            <div class="split__text reveal">
+                <p class="eyebrow">Why</p>
+                <h3 class="h-sub">Saved once, and then <span class="underline">gone</span></h3>
+                <p>
+                    A photo, a screen recording or a scanned document gets saved somewhere, once.
+                    Months later you want it back. You remember roughly when it happened. You do
+                    not remember the folder, and searching by name only works if you gave it one.
+                </p>
+                <p>
+                    AssetScout answers the question you can actually answer. Hand it a folder, an
+                    old backup, an external disk. It reads everything inside, works out when each
+                    file was really made, and puts the whole lot on a timeline.
+                </p>
+                <ul class="facts stagger">
+                    <li><b>Three ways in.</b> Choose a folder from the titlebar, drop folders on
+                        the window, or press <span class="kbd">⌘O</span>.</li>
+                    <li><b>The folders nobody can find.</b> Mail attachments, Messages attachments
+                        and the system's live wallpapers are offered by name.</li>
+                    <li><b>It remembers.</b> A folder scanned once is still reachable after you
+                        quit and start the app again.</li>
+                </ul>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="shot shot--free settle" data-range="10" style="--w: 891px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/empty-dark.webp">
+                        <img src="/assets/img/apps/assetscout/empty.webp"
+                             alt="The empty AssetScout window, with a large downward arrow and the words Drop directories here, to scan them for files"
+                             width="1782" height="1408" loading="lazy">
+                    </picture>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     What it does
+     ====================================================================== -->
+
+<section class="section" id="does">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">What it does</p>
+            <h2 class="h-section">Read the disk, then read the files</h2>
+            <p class="lead">
+                Three parts, in the order you meet them: a scan that tells you how far it has
+                got, a window grouped by month, and a panel that changes with whatever you
+                click on.
+            </p>
+        </div>
+
+        <!-- The scan -->
+        <div class="split split--wide-left" style="margin-bottom: clamp(3.5rem, 7vw, 6rem)">
+            <div class="split__text reveal">
+                <h3 class="h-sub">A scan that says how far it has got</h3>
+                <p>
+                    The scan runs in two steps, and the progress bar behaves differently in each.
+                    The first walks the directory tree and collects the files worth opening; it
+                    does not yet know how many there will be, so the bar only shows that something
+                    is happening. Once the total is known, the second step opens each file that
+                    can carry a date of its own, and the bar fills up for real.
+                </p>
+                <p>
+                    Results arrive while the scan is still running, so the window fills up as it
+                    works — you can select, look at and delete files before it has finished. The
+                    stop button ends it whenever you want, and what has been found so far stays
+                    in the window.
+                </p>
+                <ul class="facts stagger">
+                    <li><b>It stays out of other apps.</b> The scan never enters
+                        <code>Library/Containers</code>, where a read waits for an answer that
+                        never comes.</li>
+                    <li><b>It skips the copies.</b> Inside a Photos, iPhoto or Aperture library it
+                        reads the imported originals and leaves the previews, thumbnails, rendered
+                        edits and caches alone.</li>
+                    <li><b>It uses the whole machine.</b> The work is spread across as many
+                        processor cores as your Mac has.</li>
+                </ul>
+                <p style="margin-top: 1.3rem">
+                    <a class="arrowlink" href="/apps/assetscout/docs/scanning/progress/">
+                        How a scan works, step by step
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+                    </a>
+                </p>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="shot shot--free settle" data-range="12" style="--w: 682px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/months-dark.webp">
+                        <img src="/assets/img/apps/assetscout/months.webp"
+                             alt="The grid divided into 2025 November with 2 items, 2025 October with 3 items and 2025 August, one photograph in October selected"
+                             width="1365" height="1184" loading="lazy">
+                    </picture>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grouping -->
+        <div class="split split--wide-right split--flip" style="margin-bottom: clamp(3.5rem, 7vw, 6rem)">
+            <div class="split__media reveal">
+                <div class="shot shot--free settle" data-range="10" style="--w: 1140px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/types-dark.webp">
+                        <img src="/assets/img/apps/assetscout/types.webp"
+                             alt="The file type filter open over the grid: Audio 633, Document 292 switched off, Image 1132 unfolded into Photoshop, Apple icon, HEIF, JPEG, KTX, OpenEXR, PNG and TIFF, Movie 51 and Text 6090, with 1 765 items listed and 6 433 hidden"
+                             width="2280" height="1728" loading="lazy">
+                    </picture>
+                </div>
+            </div>
+
+            <div class="split__text reveal" style="--delay: 100ms">
+                <h3 class="h-sub">Grouped by the month it was made, not the month it was copied</h3>
+                <p>
+                    For photographs and videos the date comes from the file's own metadata, which
+                    is the moment the picture was taken. A picture copied off a camera last week
+                    still lands in the month it was taken in. Files that carry no such date are
+                    placed by their file dates instead, and those items can be marked, so you can
+                    see at a glance where the order is a guess.
+                </p>
+                <p>
+                    A button in the titlebar chooses which date the months are built from:
+                    <b>Creation Date</b>, or <b>Last Modified</b> for finding what you worked on
+                    recently. The choice changes the groups, the order inside them and the date
+                    under each thumbnail together, so all three always say the same thing.
+                </p>
+                <p>
+                    Narrowing down is two controls that work together. The filter switches whole
+                    kinds of file off — or individual types, JPEG but not PNG — and counts what it
+                    is hiding. <span class="kbd">⌘F</span> opens the search field, which filters
+                    the whole scan by file name as you type.
+                </p>
+                <p style="margin-top: 1.3rem">
+                    <a class="arrowlink" href="/apps/assetscout/docs/dates/">
+                        Where the dates come from
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- The inspector -->
+        <div class="split split--wide-left">
+            <div class="split__text reveal">
+                <h3 class="h-sub">One panel, and it changes with the file</h3>
+                <p>
+                    Every file gets a <b>File Info</b> section: where it is, what kind of file
+                    macOS thinks it is, its size and its dates — and its dimensions, if it has
+                    any. Above that sits a map, zoomed in on the place with a camera or a film
+                    marker when the file carries GPS coordinates.
+                </p>
+                <ul class="facts stagger">
+                    <li><b>Photographs</b> — the EXIF the camera wrote, in up to four sections:
+                        camera, lens, date and everything else.</li>
+                    <li><b>Video</b> — duration, codec, bitrate and frame rate, plus the same for
+                        the sound track when there is one.</li>
+                    <li><b>Audio</b> — duration, codec, bitrate, channels, sample rate, bit
+                        depth.</li>
+                    <li><b>Text</b> — words, lines, characters, and the language the text seems
+                        to be in.</li>
+                    <li><b>Documents</b> — what the program that made the file wrote into it, and
+                        the page, word and character counts.</li>
+                    <li><b>Several files at once</b> — how many are selected and how much room
+                        they take together.</li>
+                </ul>
+                <p style="margin-top: 1.3rem">
+                    EXIF numbers are explained rather than printed raw. The metering mode, the
+                    flash bitfield and the exposure time are given as words, and as the values a
+                    photographer reads. A tag the app does not know is not thrown away — it goes
+                    under <b>Other</b>, named the way the file names it.
+                </p>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="shot shot--free settle" data-range="12" style="--w: 408px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/panel-dark.webp">
+                        <img src="/assets/img/apps/assetscout/panel.webp"
+                             alt="The inspector on a photograph: a map of the Golden Gate with a camera marker where the picture was taken, then the file path, type, size, dates, dimensions and colour space"
+                             width="817" height="1558" loading="lazy">
+                    </picture>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Doing something with what you found
+     ====================================================================== -->
+
+<section class="section section--alt" id="actions">
+    <div class="wrap wrap--wide">
+        <div class="section__head reveal">
+            <p class="eyebrow">Actions</p>
+            <h2 class="h-section">Finding it is usually not the end of it</h2>
+            <p class="lead">
+                Select what you want — click, <span class="kbd">⇧</span>-click for a run,
+                <span class="kbd">⌘</span>-click for one more, or drag a rectangle over the
+                grid — and every action works on the whole selection.
+            </p>
+        </div>
+
+        <div class="features features--3 stagger">
+            <div class="feature">
+                <div class="shot shot--free" style="--w: 490px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/selection-dark.webp">
+                        <img src="/assets/img/apps/assetscout/selection.webp"
+                             alt="Four thumbnails in the grid selected, each with a blue background behind it"
+                             width="980" height="880" loading="lazy">
+                    </picture>
+                </div>
+                <h4 style="margin-top: 1.2rem">Select</h4>
+                <p>
+                    <span class="kbd">⌘A</span> takes everything the window lists — what the
+                    filter and the search field hide stays out of it. Scrolled away from your
+                    selection, <span class="kbd">⌘J</span> brings it back into view.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="shot shot--free" style="--w: 490px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/context-menu-dark.webp">
+                        <img src="/assets/img/apps/assetscout/context-menu.webp"
+                             alt="The menu over a selected photograph: Show in Finder, Open, Quick Look, Move to Trash, then Rotate Left, Rotate Right, Flip Horizontal and Flip Vertical"
+                             width="980" height="880" loading="lazy">
+                    </picture>
+                </div>
+                <h4 style="margin-top: 1.2rem">Look, turn, throw away</h4>
+                <p>
+                    <span class="kbd">Space</span> opens Quick Look — which is also how you play
+                    a video or a sound file. The bottom four items appear for pictures and videos
+                    and are written to the file on disk.
+                </p>
+            </div>
+
+            <div class="feature">
+                <div class="shot shot--free" style="--w: 490px">
+                    <picture>
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/drag-dark.webp">
+                        <img src="/assets/img/apps/assetscout/drag.webp"
+                             alt="Four thumbnails being dragged out of the window as a stack, with a red badge showing the number 4"
+                             width="980" height="880" loading="lazy">
+                    </picture>
+                </div>
+                <h4 style="margin-top: 1.2rem">Drag them out</h4>
+                <p>
+                    Drop the selection on a folder in the Finder, or on any app that takes files.
+                    That moves them, as dragging in the Finder does; hold
+                    <span class="kbd">⌥</span> while you drop to copy instead.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     What it does not do
+     ====================================================================== -->
+
+<section class="section" id="privacy">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left split--top">
+            <div class="split__text reveal">
+                <p class="eyebrow">Your files</p>
+                <h3 class="h-sub">It reads what you hand it, and <span class="underline">nothing else</span></h3>
+                <p>
+                    AssetScout is fully sandboxed. It starts with access to nothing at all, and
+                    gains the right to read a folder only when you choose that folder yourself.
+                    Picking <code>~/Pictures</code> says nothing about <code>~/Documents</code>.
+                </p>
+                <p>
+                    That permission is kept in a security-scoped bookmark, so a folder scanned
+                    once is still readable after a restart and you are not asked for it twice.
+                </p>
+                <p>
+                    There is no account, no sync and no server to talk to. Nothing is uploaded,
+                    and no library is built beside your files. Reading a photograph's date does
+                    not even decode the picture.
+                </p>
+                <p style="margin-top: 1.3rem">
+                    <a class="arrowlink" href="/apps/assetscout/docs/reference/privacy/">
+                        The sandbox and your files
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+                    </a>
+                </p>
+            </div>
+
+            <div class="reveal" style="--delay: 100ms">
+                <ul class="roadmap stagger">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+                        <span><b>Rotating and flipping</b>
+                            Writes the turned picture back into the file. There is no undo, and no
+                            copy is kept.</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+                        <span><b>Move to Trash</b>
+                            Puts the file in the macOS trash, where it stays until you empty
+                            it.</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+                        <span><b>Dragging a thumbnail out</b>
+                            Moves the file where you dropped it, or copies it with
+                            <span class="kbd">⌥</span> held down.</span>
+                    </li>
+                </ul>
+                <p class="muted" style="margin-top: 1.2rem; font-size: .93rem">
+                    Those three are the only things that change a file, and each of them is
+                    something you chose from a menu.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     The manual
+     ====================================================================== -->
+
+<section class="section section--alt" id="manual">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">Documentation</p>
+            <h2 class="h-section">Written down properly</h2>
+            <p class="lead">
+                Twenty-two pages covering every control, every setting and every message the app
+                can show — including the parts that are hard to guess, like which date a month is
+                built from and what a scan deliberately walks past.
+            </p>
+        </div>
+
+        <div class="cards cards--wide stagger">
+            <a class="card" href="/apps/assetscout/docs/first-scan/">
+                <h4>Your first scan</h4>
+                <p>From the empty window to a grid of results, in the order it happens.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/dates/">
+                <h4>Where the dates come from</h4>
+                <p>Capture date, file dates, and why a photograph copied last week still lands in
+                   the month it was taken.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/scanning/skipping/">
+                <h4>What a scan leaves out</h4>
+                <p>Application containers, the derived data inside a photo library, and files
+                   whose type nothing could name.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/inspector/photographs/">
+                <h4>Photographs and EXIF</h4>
+                <p>The four sections, the numbers written out as words, and the tags the app has
+                   never seen.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/reference/settings/">
+                <h4>Settings</h4>
+                <p>Both panes, switch by switch, with what each one is set to before you touch
+                   it.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/reference/shortcuts/">
+                <h4>Keyboard shortcuts</h4>
+                <p>Every shortcut the app has, and the two the mouse has.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/reference/messages/">
+                <h4>Messages, and what they mean</h4>
+                <p>Every message the app can put on screen, why it appears, and what to do about
+                   it.</p>
+            </a>
+            <a class="card" href="/apps/assetscout/docs/">
+                <h4>Start at the beginning</h4>
+                <p>What AssetScout is for, and what it does to your files.</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Close
+     ====================================================================== -->
+
+<section class="section section--tight">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal" style="margin-bottom: 0">
+            <h2 class="h-section">Written in Swift, for macOS 14.4 and newer</h2>
+            <p class="lead">
+                SwiftUI for the interface, with an AppKit collection view for the thumbnail grid,
+                because the grid has to stay smooth with tens of thousands of items in it.
+            </p>
+            <div class="cta-row hero__cta">
+                <!-- TODO: swap in the real product URL once the listing is live. -->
+                <a class="btn btn--primary" href="https://apps.apple.com/app/assetscout" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M16.4 12.7c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.6-1.3-.1-2.5.8-3.1.8-.6 0-1.6-.7-2.7-.7-1.4 0-2.7.8-3.4 2-1.4 2.5-.4 6.2 1 8.2.7 1 1.5 2.1 2.5 2.1 1 0 1.4-.6 2.6-.6s1.5.6 2.6.6c1.1 0 1.8-1 2.4-2 .8-1.1 1.1-2.2 1.1-2.3 0 0-2.1-.8-2.1-3.2zM14.4 6.3c.6-.7 1-1.6.9-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.6-.9 2.5.9.1 1.8-.5 2.4-1.2z"></path>
+                    </svg>
+                    Download on the Mac App Store
+                </a>
+                <a class="btn btn--ghost" href="/support/">Get in touch</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- chrome:footer -->
+<footer class="footer">
+    <div class="wrap wrap--wide">
+        <div class="footer__grid">
+            <div class="footer__brand">
+                <a class="brand" href="/">
+                    <span class="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <rect class="mark__tile" x="1" y="1" width="30" height="30" rx="8"></rect>
+                    <path class="mark__arc mark__arc--1" d="M7.6 16A8.4 8.4 0 0 0 24.4 16"></path>
+                    <path class="mark__arc mark__arc--2" d="M10.6 16.8A5.4 5.4 0 0 0 21.4 16.8"></path>
+                    <circle class="mark__egg" cx="16" cy="14.8" r="3"></circle>
+                </svg>
+            </span>
+                    <span class="brand__name">DevNest</span>
+                </a>
+                <p class="footer__line">Mac software from Slovakia</p>
+            </div>
+
+            <div>
+                <h5>Apps</h5>
+                <ul>
+                    <li><a href="/apps/tracktiv/">Tracktiv</a></li>
+                    <li><a href="/apps/assetscout/">AssetScout</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5>Company</h5>
+                <ul>
+                    <li><a href="/company/">About DevNest</a></li>
+                    <li><a href="/company/#imprint">Imprint</a></li>
+                    <li><a href="/support/">Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5>Elsewhere</h5>
+                <ul>
+                    <li><a href="mailto:contact@devnest.sk">contact@devnest.sk</a></li>
+                    <li><a href="/privacy/">Privacy policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <span>© <span data-year>2026</span> DevNest s.r.o.</span>
+            <span class="mono">Made on a Mac, for the Mac.</span>
+        </div>
+    </div>
+</footer>
+<!-- /chrome:footer -->
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- chrome:head -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>DevNest — Mac software from Slovakia</title>
+<meta name="description" content="DevNest s.r.o. is an independent software studio in Slovakia. We build native macOS apps that are small, quiet, and keep your data on your own machine.">
+<link rel="canonical" href="https://devnest.sk/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DevNest">
+<meta property="og:title" content="DevNest — Mac software from Slovakia">
+<meta property="og:description" content="DevNest s.r.o. is an independent software studio in Slovakia. We build native macOS apps that are small, quiet, and keep your data on your own machine.">
+<meta property="og:url" content="https://devnest.sk/">
+<meta property="og:image" content="https://devnest.sk/assets/img/brand/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://devnest.sk/assets/img/brand/og.png">
+
+<link rel="icon" href="/assets/img/brand/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/brand/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/img/brand/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/themes.css">
+
+<!-- The stored appearance is applied before the first paint, so a visitor who
+     chose dark never sees a white flash on the way in. -->
+<script>
+(function () {
+    try {
+        var stored = localStorage.getItem("appearance");
+        if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-appearance", stored);
+        }
+    } catch (e) { /* private browsing: fall back to the system setting */ }
+    document.documentElement.classList.add("js");
+})();
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y0GKK6W0T"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8Y0GKK6W0T');
+</script>
+<!-- /chrome:head -->
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- chrome:nav -->
+<header class="nav" data-nav>
+    <div class="wrap wrap--wide nav__inner">
+
+        <a class="brand" href="/">
+            <span class="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <rect class="mark__tile" x="1" y="1" width="30" height="30" rx="8"></rect>
+                    <path class="mark__arc mark__arc--1" d="M7.6 16A8.4 8.4 0 0 0 24.4 16"></path>
+                    <path class="mark__arc mark__arc--2" d="M10.6 16.8A5.4 5.4 0 0 0 21.4 16.8"></path>
+                    <circle class="mark__egg" cx="16" cy="14.8" r="3"></circle>
+                </svg>
+            </span>
+            <span class="brand__name">DevNest</span>
+        </a>
+
+        <nav class="nav__links" aria-label="Main">
+            <div class="menu" data-menu>
+                <button class="menu__btn" type="button" aria-expanded="false" aria-controls="apps-menu">
+                    Apps<span class="chev" aria-hidden="true"></span>
+                </button>
+                <div class="menu__panel" id="apps-menu" hidden>
+            <a class="menu__row" href="/apps/tracktiv/">
+                <img class="menu__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">Tracktiv<em class="dot dot--beta"></em></span>
+                    <span class="menu__sub">Writes your working day down for you.</span>
+                </span>
+            </a>
+            <a class="menu__row" href="/apps/assetscout/">
+                <img class="menu__icon" src="/assets/img/apps/assetscout/icon.svg" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">AssetScout<em class="dot dot--shipping"></em></span>
+                    <span class="menu__sub">Finds the file when you know the date, not the folder.</span>
+                </span>
+            </a>
+                </div>
+            </div>
+            <a href="/company/">Company</a>
+            <a href="/support/">Support</a>
+        </nav>
+
+        <button class="iconbtn appearance" type="button" data-appearance-toggle aria-label="Switch appearance">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.2"></circle>
+                <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"></path>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2z"></path>
+            </svg>
+            <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3.2" y="4.5" width="17.6" height="12" rx="2"></rect>
+                <path d="M8.4 20h7.2M12 16.5v3.5"></path>
+            </svg>
+        </button>
+
+        <button class="iconbtn burger" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav-sheet" aria-label="Menu">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <div class="sheet" id="nav-sheet" data-nav-sheet hidden>
+        <div class="wrap sheet__inner">
+            <p class="sheet__head">Apps</p>
+            <a class="menu__row" href="/apps/tracktiv/">
+                <img class="menu__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">Tracktiv<em class="dot dot--beta"></em></span>
+                    <span class="menu__sub">Writes your working day down for you.</span>
+                </span>
+            </a>
+            <a class="menu__row" href="/apps/assetscout/">
+                <img class="menu__icon" src="/assets/img/apps/assetscout/icon.svg" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">AssetScout<em class="dot dot--shipping"></em></span>
+                    <span class="menu__sub">Finds the file when you know the date, not the folder.</span>
+                </span>
+            </a>
+            <p class="sheet__head">DevNest</p>
+            <a class="sheet__link" href="/company/">Company</a>
+            <a class="sheet__link" href="/support/">Support</a>
+            <a class="sheet__link" href="/privacy/">Privacy policy</a>
+        </div>
+    </div>
+</header>
+<!-- /chrome:nav -->
+
+<main id="main">
+
+<!-- ======================================================================
+     Hero
+     ====================================================================== -->
+
+<section class="hero">
+    <div class="wrap wrap--wide hero__inner">
+        <p class="eyebrow reveal">DevNest s.r.o. · Slovakia</p>
+
+        <h1 class="h-display reveal" style="--delay: 60ms">
+            Small Mac apps,<br>built to be lived with.
+        </h1>
+
+        <p class="hero__lead reveal" style="--delay: 140ms">
+            DevNest is an independent software studio. We make native macOS tools that do one
+            job well, stay out of the way while they do it, and keep everything they know
+            about you on your own Mac.
+        </p>
+
+        <div class="cta-row hero__cta reveal" style="--delay: 220ms">
+            <a class="btn btn--primary" href="#apps">
+                See the apps
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"></path>
+                </svg>
+            </a>
+            <a class="btn btn--ghost" href="/company/">About DevNest</a>
+        </div>
+
+        <p class="hero__facts reveal" style="--delay: 300ms">
+            <span>Swift, and the frameworks Apple ships</span>
+            <span>Distributed through Apple</span>
+            <span>Nothing phones home</span>
+        </p>
+
+        <div class="hero__stage reveal" style="--delay: 380ms">
+            <div class="stage" data-stage aria-hidden="true">
+
+                <div class="stage__win stage__win--back">
+                    <div class="winbar"><i></i><i></i><i></i><span>DayRing.swift</span></div>
+                    <div class="code">
+<span style="--i: 0">struct <b>DayRing</b>: View {</span>
+<span style="--i: 1">    var seconds: Int</span>
+<span style="--i: 2">    var body: some View {</span>
+<span style="--i: 3">        Circle()</span>
+<span style="--i: 4">            .trim(to: <b>fraction</b>)</span>
+<span style="--i: 5">    }</span>
+<span style="--i: 6">}</span>
+                    </div>
+                </div>
+
+                <div class="stage__win stage__win--mid">
+                    <div class="winbar"><i></i><i></i><i></i><span>Library</span></div>
+                    <div class="rows">
+                        <i style="--i: 0"></i><i style="--i: 1"></i><i style="--i: 2"></i>
+                        <i style="--i: 3"></i><i style="--i: 4"></i><i style="--i: 5"></i>
+                        <i style="--i: 6"></i>
+                    </div>
+                </div>
+
+                <div class="stage__win stage__win--front">
+                    <div class="winbar"><i></i><i></i><i></i><span>This week</span></div>
+                    <div style="padding: .9rem 1rem 1.1rem">
+                        <svg class="chart" viewBox="0 0 320 150">
+                            <g class="chart__grid">
+                                <path d="M12 138h288M12 100h288M12 62h288M12 24h288"></path>
+                            </g>
+                            <path class="chart__fill" d="M12 118 60 96 108 104 156 66 204 78 252 40 300 22 300 138 12 138Z"></path>
+                            <path class="chart__line" d="M12 118 60 96 108 104 156 66 204 78 252 40 300 22"></path>
+                            <g>
+                                <circle class="chart__dot" style="--i: 0" cx="12"  cy="118" r="3.5"></circle>
+                                <circle class="chart__dot" style="--i: 1" cx="60"  cy="96"  r="3.5"></circle>
+                                <circle class="chart__dot" style="--i: 2" cx="108" cy="104" r="3.5"></circle>
+                                <circle class="chart__dot" style="--i: 3" cx="156" cy="66"  r="3.5"></circle>
+                                <circle class="chart__dot" style="--i: 4" cx="204" cy="78"  r="3.5"></circle>
+                                <circle class="chart__dot" style="--i: 5" cx="252" cy="40"  r="3.5"></circle>
+                                <circle class="chart__dot" style="--i: 6" cx="300" cy="22"  r="3.5"></circle>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     The apps
+     ====================================================================== -->
+
+<section class="section section--alt" id="apps">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">The apps</p>
+            <h2 class="h-section">Small apps, one job each</h2>
+            <p class="lead">
+                Both of them take something you already have and show it to you properly: the
+                working day you have just spent, and the files scattered across your disks.
+            </p>
+        </div>
+
+        <div class="appgrid">
+            <a class="appcard reveal" href="/apps/tracktiv/" data-app="tracktiv">
+                <div class="appcard__top">
+                    <img class="appcard__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="46" height="46">
+                    <div>
+                        <div class="appcard__name">Tracktiv</div>
+                        <div class="appcard__state"><em class="dot dot--beta"></em>In beta</div>
+                    </div>
+                </div>
+                <p class="appcard__body">
+                    A time tracker for people who keep three projects going at once. It records
+                    the working day while the day happens and hands it back at the end of it —
+                    no timers, no account, nothing leaves the Mac.
+                </p>
+                <span class="appcard__go">
+                    Look at Tracktiv
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6"></path>
+                    </svg>
+                </span>
+            </a>
+
+            <a class="appcard reveal" href="/apps/assetscout/" data-app="assetscout" style="--delay: 80ms">
+                <div class="appcard__top">
+                    <picture class="appcard__icon">
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/apps/assetscout/icon-dark.svg">
+                        <img src="/assets/img/apps/assetscout/icon.svg" alt="" width="46" height="46">
+                    </picture>
+                    <div>
+                        <div class="appcard__name">AssetScout</div>
+                        <div class="appcard__state"><em class="dot dot--shipping"></em>On the Mac App Store</div>
+                    </div>
+                </div>
+                <p class="appcard__body">
+                    Point it at a folder or a whole drive and it lays out every picture, video,
+                    recording and document on it, in the order they were made. For when you know
+                    the date but not the folder.
+                </p>
+                <span class="appcard__go">
+                    Look at AssetScout
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6"></path>
+                    </svg>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Tracktiv, shown rather than described
+     ====================================================================== -->
+
+<section class="section">
+    <div class="wrap wrap--wide">
+        <div class="section__head reveal">
+            <p class="eyebrow">Currently in beta</p>
+            <h2 class="h-section">A working day, written down for you</h2>
+            <p class="lead">
+                This is one real Monday, exactly as Tracktiv drew it while it happened. Nobody
+                started a timer, and nobody filled anything in afterwards.
+            </p>
+        </div>
+
+        <div class="mat mat--flush reveal">
+            <div class="shot shot--detail wipe" style="--w: 1244px">
+                <img src="/assets/img/apps/tracktiv/crop-daystrip.webp"
+                     alt="A whole day drawn as one bar: coloured blocks from eight in the morning to eleven at night, with the gaps between them"
+                     width="2488" height="98" loading="lazy">
+            </div>
+        </div>
+        <p class="shot__caption shot__caption--center">
+            Green is half an hour of television before work, light blue a client, dark blue our own
+            product, purple the one meeting. The white spaces are the breaks.
+        </p>
+
+        <div class="cta-row reveal">
+            <a class="btn btn--primary" href="/apps/tracktiv/">
+                How Tracktiv works
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"></path>
+                </svg>
+            </a>
+            <span class="btn__note">TestFlight now · Mac App Store later</span>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     How we work
+     ====================================================================== -->
+
+<section class="section section--alt" id="how">
+    <div class="wrap wrap--wide">
+        <div class="section__head reveal">
+            <p class="eyebrow">How we work</p>
+            <h2 class="h-section">Three rules we don't bend</h2>
+        </div>
+
+        <div class="features features--3">
+            <div class="feature reveal">
+                <span class="feature__mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M8 21h8M12 18v3"></path>
+                    </svg>
+                </span>
+                <h4>Native, not wrapped</h4>
+                <p>
+                    Swift and the frameworks Apple ships. An app should open fast, feel like the
+                    system it runs on, and cost the machine as little as it can.
+                </p>
+            </div>
+
+            <div class="feature reveal" style="--delay: 80ms">
+                <span class="feature__mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3l7.5 3.4v5.1c0 4.4-3.1 8.1-7.5 9.5-4.4-1.4-7.5-5.1-7.5-9.5V6.4z"></path>
+                        <path d="M9.2 12.2l2 2 3.6-4"></path>
+                    </svg>
+                </span>
+                <h4>Your data stays yours</h4>
+                <p>
+                    Our apps keep what they know on your Mac and nowhere else. No account, no
+                    sync, no analytics — and in Tracktiv's case, no network permission at all.
+                </p>
+            </div>
+
+            <div class="feature reveal" style="--delay: 160ms">
+                <span class="feature__mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
+                    </svg>
+                </span>
+                <h4>Small and finished</h4>
+                <p>
+                    We would rather ship a smaller thing that is done than a bigger one that is
+                    nearly done. Everything here is used every day by the person who wrote it.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Company
+     ====================================================================== -->
+
+<section class="section">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left">
+            <div class="split__text reveal">
+                <p class="eyebrow">The company</p>
+                <h3 class="h-sub">DevNest s.r.o.</h3>
+                <p>
+                    DevNest is a software company registered in Slovakia. It began as a set of
+                    side projects, the first of which reached the Mac App Store in 2017, and grew
+                    into the place the apps on this site come from.
+                </p>
+                <p>
+                    Alongside our own products we take on development work for other people:
+                    macOS and iOS apps, system-level tooling, and the parts of a project that
+                    turn out to be harder than they looked.
+                </p>
+                <div class="cta-row">
+                    <a class="btn btn--ghost" href="/company/">About DevNest</a>
+                    <a class="btn btn--ghost" href="/support/">Get in touch</a>
+                </div>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="macwin macwin--live parallax" data-speed="0.05">
+                    <div class="macwin__bar">
+                        <i></i><i></i><i></i>
+                        <span class="macwin__title">devnest.sk</span>
+                    </div>
+                    <div class="macwin__body">
+                        <div class="stats" style="margin-top: 0">
+                            <div class="stat">
+                                <div class="stat__n"><span class="count" data-count="2">2</span></div>
+                                <div class="stat__l">apps, made and looked after here</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat__n">2017</div>
+                                <div class="stat__l">our first year on the App Store</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat__n"><span class="count" data-count="0">0</span></div>
+                                <div class="stat__l">bytes of your data on our servers</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat__n"><span class="count" data-count="1">1</span></div>
+                                <div class="stat__l">person, answering the email</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- chrome:footer -->
+<footer class="footer">
+    <div class="wrap wrap--wide">
+        <div class="footer__grid">
+            <div class="footer__brand">
+                <a class="brand" href="/">
+                    <span class="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <rect class="mark__tile" x="1" y="1" width="30" height="30" rx="8"></rect>
+                    <path class="mark__arc mark__arc--1" d="M7.6 16A8.4 8.4 0 0 0 24.4 16"></path>
+                    <path class="mark__arc mark__arc--2" d="M10.6 16.8A5.4 5.4 0 0 0 21.4 16.8"></path>
+                    <circle class="mark__egg" cx="16" cy="14.8" r="3"></circle>
+                </svg>
+            </span>
+                    <span class="brand__name">DevNest</span>
+                </a>
+                <p class="footer__line">Mac software from Slovakia</p>
+            </div>
+
+            <div>
+                <h5>Apps</h5>
+                <ul>
+                    <li><a href="/apps/tracktiv/">Tracktiv</a></li>
+                    <li><a href="/apps/assetscout/">AssetScout</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5>Company</h5>
+                <ul>
+                    <li><a href="/company/">About DevNest</a></li>
+                    <li><a href="/company/#imprint">Imprint</a></li>
+                    <li><a href="/support/">Support</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h5>Elsewhere</h5>
+                <ul>
+                    <li><a href="mailto:contact@devnest.sk">contact@devnest.sk</a></li>
+                    <li><a href="/privacy/">Privacy policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <span>© <span data-year>2026</span> DevNest s.r.o.</span>
+            <span class="mono">Made on a Mac, for the Mac.</span>
+        </div>
+    </div>
+</footer>
+<!-- /chrome:footer -->
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

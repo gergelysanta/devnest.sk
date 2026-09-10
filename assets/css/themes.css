@@ -1,0 +1,431 @@
+/* ==========================================================================
+   devnest.sk — skins and scenes
+   --------------------------------------------------------------------------
+   Part 1 re-declares colour tokens per app. Nothing else: the header, the
+   spacing, the components and the type all come from site.css, so a visitor
+   moving between two apps sees the same furniture in a different colour.
+
+   Part 2 holds the drawn scenes — the hero illustrations and the app cards.
+   They are hand-built HTML and SVG rather than images so they answer to the
+   tokens above and stay sharp at any size.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. App skins
+
+   Each app declares its light values on [data-app], then its dark values
+   twice — once for the explicit choice, once for the system default. The
+   colours are the app's own: Tracktiv's from Assets.xcassets, AssetScout's
+   from the two fills in AppIcon.icon.
+   -------------------------------------------------------------------------- */
+
+/* Tracktiv — the blue of the app icon, the green of its ring ------------- */
+
+body[data-app="tracktiv"] {
+    --accent:      #2f6fcc;
+    --accent-2:    #6aa4e8;
+    --accent-ink:  #ffffff;
+    --accent-soft: rgba(47, 111, 204, .11);
+    --accent-line: rgba(47, 111, 204, .36);
+    --ring:        #4da368;
+    --over:        #d92d30;
+
+    /* The category colours Tracktiv paints a day with */
+    --c-activity:  #82c9be;
+    --c-work:      #7297cb;
+    --c-devnest:   #3d74c2;
+    --c-meeting:   #a37bcc;
+    --c-gaming:    #d69566;
+    --c-fun:       #89c167;
+    --c-browsing:  #77c589;
+}
+:root[data-appearance="dark"] body[data-app="tracktiv"] {
+    --accent:      #4fa3ff;
+    --accent-2:    #8cc6ff;
+    --accent-ink:  #04121f;
+    --accent-soft: rgba(79, 163, 255, .16);
+    --accent-line: rgba(79, 163, 255, .42);
+    --ring:        #7cc98c;
+    --over:        #ff5a5c;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-appearance="light"]) body[data-app="tracktiv"] {
+        --accent:      #4fa3ff;
+        --accent-2:    #8cc6ff;
+        --accent-ink:  #04121f;
+        --accent-soft: rgba(79, 163, 255, .16);
+        --accent-line: rgba(79, 163, 255, .42);
+        --ring:        #7cc98c;
+        --over:        #ff5a5c;
+    }
+}
+
+/* AssetScout — the amber of the icon, over the charcoal of its label ------
+
+   The icon's own amber, #e8a24a, is too light to read as text on white: it
+   sits at about 2.1:1 against it, and the site uses --accent for links. The
+   light value is therefore the same hue darkened to 4.9:1, and the icon
+   colour itself becomes --accent-2. On a dark page the amber is bright
+   enough on its own, so there it is the accent. */
+
+body[data-app="assetscout"] {
+    --accent:      #a9631b;
+    --accent-2:    #e8a24a;
+    --accent-ink:  #ffffff;
+    --accent-soft: rgba(169, 99, 27, .10);
+    --accent-line: rgba(169, 99, 27, .34);
+    --label:       #2a2f33;
+}
+:root[data-appearance="dark"] body[data-app="assetscout"] {
+    --accent:      #e8a24a;
+    --accent-2:    #f4c68d;
+    --accent-ink:  #231703;
+    --accent-soft: rgba(232, 162, 74, .16);
+    --accent-line: rgba(232, 162, 74, .42);
+    --label:       #f1eadd;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-appearance="light"]) body[data-app="assetscout"] {
+        --accent:      #e8a24a;
+        --accent-2:    #f4c68d;
+        --accent-ink:  #231703;
+        --accent-soft: rgba(232, 162, 74, .16);
+        --accent-line: rgba(232, 162, 74, .42);
+        --label:       #f1eadd;
+    }
+}
+
+/* ==========================================================================
+   2. Scenes
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   2.1 The home stage: three Mac windows, stacked and drifting
+
+   The drift is two things at once. A slow idle float runs on its own, and a
+   pointer parallax is written into --px / --py by site.js. Both move the whole
+   window. They stay in separate CSS properties — the float writes `translate`,
+   the parallax writes `transform` — so neither has to know about the other.
+   Moving only the content inside the frame would look wrong: the window border
+   would stand still while its title bar slides up and down.
+   -------------------------------------------------------------------------- */
+
+.stage {
+    position: relative;
+    max-width: 940px;
+    margin-inline: auto;
+    aspect-ratio: 16 / 10;
+    perspective: 1400px;
+    text-align: left;   /* the hero centres its text; the windows must not */
+}
+
+.stage__win {
+    position: absolute;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-lg);
+    transform: translate3d(calc(var(--px, 0) * var(--depth, 1) * 1px),
+                           calc(var(--py, 0) * var(--depth, 1) * 1px), 0);
+    transition: transform .45s var(--ease);
+}
+.stage__win { animation: float 9s ease-in-out infinite; }
+
+.stage__win--back  { left: 0;    top: 2%;  width: 58%; --depth: .5; animation-delay: -1.5s; }
+.stage__win--mid   { right: 0;   top: 16%; width: 52%; --depth: 1.1; animation-delay: -4.5s; }
+.stage__win--front { left: 12%;  bottom: 0; width: 62%; --depth: 1.7; z-index: 2; }
+
+@keyframes float {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -9px; }
+}
+
+.winbar {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem .7rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+}
+.winbar i { width: 10px; height: 10px; border-radius: 50%; }
+.winbar i:nth-child(1) { background: #ff5f57; }
+.winbar i:nth-child(2) { background: #febc2e; }
+.winbar i:nth-child(3) { background: #28c840; }
+.winbar span {
+    margin-left: .5rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .04em;
+    color: var(--muted);
+}
+
+/* Skeleton rows that wash in, one after another */
+.rows { display: grid; gap: .55rem; padding: .95rem; }
+.rows i {
+    height: 9px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--surface-2) 0%, var(--line) 40%, var(--surface-2) 80%);
+    background-size: 300% 100%;
+    animation: wash 3.2s linear infinite;
+    animation-delay: calc(var(--i, 0) * .18s);
+}
+.rows i:nth-child(3n)   { width: 62%; }
+.rows i:nth-child(3n+1) { width: 88%; }
+.rows i:nth-child(3n+2) { width: 74%; }
+@keyframes wash {
+    0%   { background-position: 120% 0; }
+    100% { background-position: -60% 0; }
+}
+
+/* The code window types itself out, one line at a time */
+.code {
+    padding: .9rem 1rem;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    line-height: 1.75;
+    color: var(--muted);
+    overflow: hidden;
+}
+/* The lines keep their own `pre`, but the container must not: with `pre` on the
+   wrapper the newlines between the spans become blank lines of their own. */
+.code span {
+    display: block;
+    overflow: hidden;
+    white-space: pre;
+    width: 0;
+    animation: type 9s steps(40, end) infinite;
+    animation-delay: calc(var(--i, 0) * .35s);
+}
+.code b { color: var(--accent); font-weight: 500; }
+@keyframes type {
+    0%        { width: 0; }
+    12%, 78%  { width: 100%; }
+    92%, 100% { width: 0; }
+}
+
+/* The chart draws its own line, then fills underneath it */
+.chart { display: block; width: 100%; height: auto; }
+.chart__line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 460;
+    stroke-dashoffset: 460;
+    animation: draw 3.4s var(--ease) forwards;
+    animation-delay: .35s;
+}
+.chart__fill {
+    fill: var(--accent);
+    opacity: 0;
+    animation: fade-in 1.6s var(--ease) forwards;
+    animation-delay: 2.2s;
+}
+.chart__grid { stroke: var(--line); stroke-width: 1; }
+.chart__dot  {
+    fill: var(--accent);
+    opacity: 0;
+    animation: pop .5s var(--ease) forwards;
+    animation-delay: calc(1.2s + var(--i, 0) * .35s);
+}
+@keyframes draw    { to { stroke-dashoffset: 0; } }
+@keyframes fade-in { to { opacity: .14; } }
+@keyframes pop     { from { transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+
+/* --------------------------------------------------------------------------
+   2.2 App cards on the home page
+   -------------------------------------------------------------------------- */
+
+.appgrid {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+}
+
+.appcard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+    padding: 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform .35s var(--ease), border-color .25s var(--ease), box-shadow .35s var(--ease);
+}
+/* Each card carries its own app's colour, so the row of them reads as three
+   products rather than three copies of one. */
+.appcard[data-app="tracktiv"]  { --card: #2f6fcc; }
+.appcard[data-app="assetscout"] { --card: #a9631b; }
+:root[data-appearance="dark"] .appcard[data-app="tracktiv"]  { --card: #4fa3ff; }
+:root[data-appearance="dark"] .appcard[data-app="assetscout"] { --card: #e8a24a; }
+@media (prefers-color-scheme: dark) {
+    :root:not([data-appearance="light"]) .appcard[data-app="tracktiv"]  { --card: #4fa3ff; }
+    :root:not([data-appearance="light"]) .appcard[data-app="assetscout"] { --card: #e8a24a; }
+}
+
+.appcard:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--card) 45%, var(--line));
+    box-shadow: var(--shadow-md);
+}
+
+/* The hover tint is a full-width band behind the header row — not a radial
+   blob — so it reads as a coloured header that fades into the card body,
+   rather than a patch floating behind the icon. It bleeds to the card's own
+   edges (top/left/right match .appcard's padding). The stops are fixed
+   lengths, not percentages: the solid zone (0–4.5rem) is sized to clear the
+   1.6rem bleed plus the header row itself, so the icon, title and status
+   line all sit inside the solid colour instead of in the fade. The fade
+   then runs another 4.5rem, deliberately bleeding into the body text. */
+.appcard__top { position: relative; display: flex; align-items: center; gap: .8rem; }
+.appcard__top::before {
+    content: "";
+    position: absolute;
+    inset: -1.6rem -1.6rem -4.6rem -1.6rem;
+    z-index: -1;
+    background: linear-gradient(to bottom,
+        color-mix(in srgb, var(--card) 20%, var(--surface)) 0,
+        color-mix(in srgb, var(--card) 20%, var(--surface)) 4.5rem,
+        transparent 9rem);
+    opacity: 0;
+    transition: opacity .35s var(--ease);
+}
+.appcard:hover .appcard__top::before { opacity: 1; }
+.appcard__icon {
+    display: block;
+    flex: none;
+    width: 46px; height: 46px;
+    border-radius: 11px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .35s var(--ease);
+}
+/* An icon that has a dark version of its own is a .pair of two images. */
+.appcard__icon img { width: 100%; height: 100%; border-radius: inherit; }
+.appcard:hover .appcard__icon { transform: scale(1.06) rotate(-3deg); }
+.appcard__name { font-size: 1.16rem; font-weight: 600; letter-spacing: -.02em; }
+.appcard__state {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.appcard__body { font-size: .95rem; line-height: 1.55; color: var(--ink-2); flex: 1; }
+.appcard__go {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .9rem;
+    font-weight: 500;
+    color: var(--card);
+}
+.appcard__go svg { width: 15px; height: 15px; transition: transform .25s var(--ease); }
+.appcard:hover .appcard__go svg { transform: translateX(3px); }
+
+/* --------------------------------------------------------------------------
+   2.3 Tracktiv scenes
+   -------------------------------------------------------------------------- */
+
+/* A ring that fills to the value in --p (0…1) once it is scrolled into view */
+.ring { display: block; width: 100%; height: auto; }
+.ring__track { fill: none; stroke: var(--line-strong); stroke-width: 9; }
+.ring__value {
+    fill: none;
+    stroke: var(--ring, var(--accent));
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: var(--circ, 314);
+    stroke-dashoffset: var(--circ, 314);
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.6s var(--ease);
+}
+.ring.is-in .ring__value,
+html:not(.js) .ring__value { stroke-dashoffset: calc(var(--circ, 314) * (1 - var(--p, .6))); }
+.ring__over { stroke: var(--over, var(--bad)); }
+
+/* The day strip is a real screenshot, wiped in from the left as if the day
+   were being written while you watch. */
+.wipe { clip-path: inset(0 100% 0 0); transition: clip-path 1.8s var(--ease); }
+.wipe.is-in { clip-path: inset(0 0 0 0); }
+
+/* A row of category chips, in the app's own colours */
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.4rem; }
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .3rem .7rem .3rem .55rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-size: .84rem;
+    color: var(--ink-2);
+}
+.chip i { width: 9px; height: 9px; border-radius: 3px; background: var(--c, var(--accent)); }
+
+/* Big measured numbers */
+.stats {
+    display: grid;
+    gap: 1.4rem 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+    margin-top: 2.2rem;
+}
+.stat__n {
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -.035em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+}
+.stat__n small { font-size: .5em; font-weight: 500; color: var(--muted); margin-left: .15em; }
+.stat__l { font-size: .86rem; color: var(--muted); }
+
+/* --------------------------------------------------------------------------
+   2.4 A plain "what it does / what is left" checklist, for an app that is
+   not out yet
+   -------------------------------------------------------------------------- */
+
+
+.roadmap { display: grid; gap: .1rem; margin: 0; padding: 0; list-style: none; }
+.roadmap li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: .7rem;
+    align-items: start;
+    padding: .8rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: .97rem;
+    color: var(--ink-2);
+}
+.roadmap li:last-child { border-bottom: 0; }
+.roadmap svg { width: 18px; height: 18px; margin-top: .18em; color: var(--accent); }
+.roadmap b { display: block; color: var(--ink); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   2.5 A quiet notice strip — used for "not released yet" and similar
+   -------------------------------------------------------------------------- */
+
+.notice {
+    display: flex;
+    gap: .9rem;
+    align-items: flex-start;
+    padding: 1.1rem 1.3rem;
+    border: 1px solid var(--accent-line);
+    border-radius: var(--r-md);
+    background: var(--accent-soft);
+    font-size: .95rem;
+    color: var(--ink-2);
+}
+.notice svg { width: 19px; height: 19px; flex: none; margin-top: .15em; color: var(--accent); }
+.notice a { color: var(--accent); }
