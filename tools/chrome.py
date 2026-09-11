@@ -254,17 +254,15 @@ HEAD = """<meta charset="utf-8">
     gtag('config', '{analytics}');
 </script>"""
 
-# The mark: two arcs closing under a dot — a nest with something in it. Inline
-# so the tile takes the theme accent. The same geometry is in
-# assets/img/brand/favicon.svg.
-MARK = """<span class="brand__mark" aria-hidden="true">
-                <svg viewBox="0 0 32 32" fill="none">
-                    <rect class="mark__tile" x="1" y="1" width="30" height="30" rx="8"></rect>
-                    <path class="mark__arc mark__arc--1" d="M7.6 16A8.4 8.4 0 0 0 24.4 16"></path>
-                    <path class="mark__arc mark__arc--2" d="M10.6 16.8A5.4 5.4 0 0 0 21.4 16.8"></path>
-                    <circle class="mark__egg" cx="16" cy="14.8" r="3"></circle>
-                </svg>
-            </span>"""
+# The logo carries the company name itself, so nothing else needs to spell it
+# out beside it. Two files because the wordmark is dark-on-transparent and
+# needs a light-on-transparent twin for a dark page — same swap mechanism as
+# the appearance-aware screenshots: see data-dark-source in site.js.
+LOGO = """<picture class="brand__logo">
+                <source data-dark-source media="(prefers-color-scheme: dark)"
+                        srcset="/assets/img/brand/DevNestLogoDark.svg">
+                <img src="/assets/img/brand/DevNestLogo.svg" alt="DevNest" width="115" height="46">
+            </picture>"""
 
 MENU_ROW = """            <a class="menu__row{current}" href="{url}">
                 <img class="menu__icon" src="{icon}" alt="" width="30" height="30" loading="lazy">
@@ -278,8 +276,7 @@ NAV = """<header class="nav" data-nav>
     <div class="wrap wrap--wide nav__inner">
 
         <a class="brand" href="/">
-            {mark}
-            <span class="brand__name">DevNest</span>{product}
+            {logo}{product}
         </a>
 
         <nav class="nav__links" aria-label="Main">
@@ -340,8 +337,7 @@ FOOTER = """<footer class="footer">
         <div class="footer__grid">
             <div class="footer__brand">
                 <a class="brand" href="/">
-                    {mark}
-                    <span class="brand__name">DevNest</span>
+                    {logo}
                 </a>
                 <p class="footer__line">{tagline}</p>
             </div>
@@ -402,7 +398,7 @@ def build_nav(meta):
         product = ('\n            <span class="brand__sep" aria-hidden="true">/</span>'
                    '\n            <span class="brand__product">%s</span>' % name)
     return NAV.format(
-        mark=MARK,
+        logo=LOGO,
         product=product,
         menu_rows=rows,
         apps_current=" is-current" if app_id else "",
@@ -415,7 +411,7 @@ def build_footer(meta):
     links = "\n".join(
         '                    <li><a href="%s">%s</a></li>' % (a["url"], a["name"]) for a in APPS
     )
-    return FOOTER.format(mark=MARK, tagline=TAGLINE, app_links=links,
+    return FOOTER.format(logo=LOGO, tagline=TAGLINE, app_links=links,
                          email=EMAIL, company=COMPANY)
 
 

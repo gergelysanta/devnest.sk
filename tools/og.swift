@@ -1,12 +1,14 @@
 import AppKit
 
 // Draws the link preview card, assets/img/brand/og.png, at the 1200×630 most
-// scrapers expect. The mark is the same geometry as the favicon and the inline
-// SVG in tools/chrome.py; the colours are the site's light tokens.
+// scrapers expect. The logo is DevNestLogo.svg, the same file the header and
+// footer use; the colours are the site's light tokens. Run from the repo
+// root, so the relative path to the logo resolves:
 //
 //   swiftc -O tools/og.swift -o /tmp/og && /tmp/og assets/img/brand/og.png
 
 let out = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "og.png"
+let logoPath = "assets/img/brand/DevNestLogo.svg"
 let W = 1200, H = 630
 
 let cs = CGColorSpaceCreateDeviceRGB()
@@ -17,7 +19,6 @@ func rgb(_ r: Double, _ g: Double, _ b: Double) -> CGColor {
     CGColor(red: r / 255, green: g / 255, blue: b / 255, alpha: 1)
 }
 let bg     = rgb(244, 245, 247)   // --bg
-let ink    = rgb(14, 19, 25)      // --ink
 let muted  = rgb(106, 116, 130)   // --muted
 let accent = rgb(10, 111, 208)    // --accent
 
@@ -34,33 +35,23 @@ if let glow = CGGradient(colorsSpace: cs,
     ctx.restoreGState()
 }
 
-// The mark, drawn in a 32-point square scaled up and placed on the left.
-func drawMark(at origin: CGPoint, size: CGFloat) {
-    let s = size / 32
-    ctx.saveGState()
-    ctx.translateBy(x: origin.x, y: origin.y + size)
-    ctx.scaleBy(x: s, y: -s)
-
-    ctx.addPath(CGPath(roundedRect: CGRect(x: 1, y: 1, width: 30, height: 30),
-                       cornerWidth: 8, cornerHeight: 8, transform: nil))
-    ctx.setFillColor(accent)
-    ctx.fillPath()
-
-    ctx.setStrokeColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
-    ctx.setLineCap(.round)
-    ctx.setLineWidth(2.2)
-    ctx.addArc(center: CGPoint(x: 16, y: 16), radius: 8.4, startAngle: .pi, endAngle: 0, clockwise: true)
-    ctx.strokePath()
-    ctx.setAlpha(0.6)
-    ctx.addArc(center: CGPoint(x: 16, y: 16.8), radius: 5.4, startAngle: .pi, endAngle: 0, clockwise: true)
-    ctx.strokePath()
-    ctx.setAlpha(1)
-    ctx.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 1))
-    ctx.fillEllipse(in: CGRect(x: 13, y: 11.8, width: 6, height: 6))
-    ctx.restoreGState()
+// The logo already spells out the company name, so it replaces both the old
+// mark and the "DevNest" wordmark text in one draw. AppKit rasterises the SVG
+// itself; only the target rectangle is ours to pick. 758×302 is the file's
+// own viewBox, so this keeps its aspect ratio.
+guard let logo = NSImage(contentsOfFile: logoPath) else {
+    fatalError("could not load \(logoPath)")
 }
-
-drawMark(at: CGPoint(x: 96, y: 400), size: 116)
+let logoH: CGFloat = 220
+let logoW = logoH * 758 / 302
+do {
+    let gc = NSGraphicsContext(cgContext: ctx, flipped: false)
+    NSGraphicsContext.saveGraphicsState()
+    NSGraphicsContext.current = gc
+    logo.draw(in: CGRect(x: 92, y: 260, width: logoW, height: logoH),
+              from: .zero, operation: .sourceOver, fraction: 1)
+    NSGraphicsContext.restoreGraphicsState()
+}
 
 func draw(_ text: String, at point: CGPoint, size: CGFloat, weight: NSFont.Weight, color: CGColor,
           tracking: CGFloat = 0) {
@@ -78,9 +69,8 @@ func draw(_ text: String, at point: CGPoint, size: CGFloat, weight: NSFont.Weigh
     NSGraphicsContext.restoreGraphicsState()
 }
 
-draw("DevNest", at: CGPoint(x: 96, y: 268), size: 108, weight: .bold, color: ink, tracking: -4)
 draw("Mac software from Slovakia", at: CGPoint(x: 100, y: 208), size: 36, weight: .regular, color: muted)
-draw("TRACKTIV   ·   PHOTOMINER   ·   MEDIASCOUT",
+draw("TRACKTIV   ·   ASSETSCOUT",
      at: CGPoint(x: 100, y: 118), size: 22, weight: .medium, color: accent, tracking: 3)
 
 let rep = NSBitmapImageRep(cgImage: ctx.makeImage()!)

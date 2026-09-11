@@ -127,7 +127,7 @@ swiftc -O tools/shot.swift -o /tmp/shot
 /tmp/shot http://127.0.0.1:8765/apps/tracktiv/ 1400 950 /tmp/out.png "#projects" dark
 ```
 
-The link preview, `assets/img/brand/og.png`, is drawn from the same mark and the
+The link preview, `assets/img/brand/og.png`, is drawn from the same logo and the
 same colours:
 
 ```bash

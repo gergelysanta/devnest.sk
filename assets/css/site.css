@@ -282,19 +282,10 @@ code { font-family: var(--font-mono); font-size: .92em; }
     font-size: 1.02rem;
     letter-spacing: -.022em;
 }
-.brand__mark { display: block; width: 27px; height: 27px; flex: none; }
-.brand__mark svg { width: 100%; height: 100%; overflow: visible; }
-.mark__tile { fill: var(--accent); }
-.mark__arc  { stroke: var(--accent-ink); stroke-width: 2.1; stroke-linecap: round; opacity: .95; }
-.mark__arc--2 { opacity: .6; }
-.mark__egg  { fill: var(--accent-ink); }
-.brand:hover .mark__arc--1 { animation: nest-pulse .6s var(--ease); }
+.brand__logo { display: block; }
+.brand__logo img { display: block; height: 46px; width: auto; }
 .brand__sep     { color: var(--muted); font-weight: 400; }
 .brand__product { color: var(--muted); font-weight: 500; }
-
-@keyframes nest-pulse {
-    50% { transform: translateY(-1.5px); }
-}
 
 .nav__links {
     display: flex;
