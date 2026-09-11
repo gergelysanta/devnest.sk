@@ -24,9 +24,10 @@
 <link rel="icon" href="/assets/img/brand/icon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/img/brand/icon-180.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Every page sets its text in this file, so it is fetched together with the
+     stylesheet instead of after it. Then the text rarely shows up in the
+     system font first and switches a moment later. -->
+<link rel="preload" href="/assets/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/themes.css">
@@ -228,21 +229,16 @@
             <h2>This website</h2>
             <p>
                 devnest.sk is a set of static files. It sets no cookies and runs no analytics.
-                The appearance you choose with the sun and moon button is kept in your browser's
-                local storage and never leaves it.
+                The fonts, the images and the scripts are all served from devnest.sk itself, so
+                the page loads nothing from anybody else. The appearance you choose with the sun
+                and moon button is kept in your browser's local storage and never leaves it.
             </p>
             <p>
-                Two third parties see your visit, because they deliver the page to you.
+                One third party sees your visit, because it delivers the page to you.
                 <strong>Cloudflare</strong> serves the site, so like any web host it sees your
-                IP address and your browser. <strong>Google Fonts</strong> serves the two
-                typefaces the page uses, so Google's font server also sees your IP address.
-                If you would rather not load the fonts from Google, a content blocker will stop
-                them, and the site still works in your system's own typeface.
-            </p>
-            <p>
-                Both companies are based in the United States, so this may be processed there.
-                Both are certified under the EU–US Data Privacy Framework, which the European
-                Commission accepts as adequate protection for personal data.
+                IP address and your browser. Cloudflare is based in the United States, so this
+                may be processed there. It is certified under the EU–US Data Privacy Framework,
+                which the European Commission accepts as adequate protection for personal data.
             </p>
 
             <h2>Email</h2>
@@ -259,7 +255,7 @@
                 our legitimate interest (Article 6(1)(f)) in each of these:
             </p>
             <ul>
-                <li>delivering this website to you, through Cloudflare and Google Fonts;</li>
+                <li>delivering this website to you, through Cloudflare;</li>
                 <li>answering your email, and remembering a bug once it has been reported;</li>
                 <li>fixing the apps with crash reports and beta feedback.</li>
             </ul>

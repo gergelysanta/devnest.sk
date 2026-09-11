@@ -22,6 +22,7 @@ assets/css/site.css     Tokens, the header, the sections, the components
 assets/css/themes.css   Per-app colour skins, and the drawn scenes
 assets/js/site.js       Appearance switch, reveals, menus, parallax, counters, drift
 assets/img/             App icons and screenshots
+assets/fonts/           Instrument Sans and IBM Plex Mono, with their licences
 tools/chrome.py         Keeps the header, the footer and the manual's sidebar in step
 tools/shot.swift        Photographs a section of the site without a browser window
 tools/og.swift          Redraws assets/img/brand/og.png, the link preview card
