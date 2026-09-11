@@ -9,9 +9,10 @@
    which is the point: the frame is DevNest, the colour is the app.
 
    Appearance: the page follows the system setting until the visitor picks a
-   side, and the choice is stored. Because a media query cannot appear in a
-   selector list, the dark values are written twice — once for the explicit
-   choice and once for the system default. They must stay in step.
+   side, and the choice is stored. A media query cannot appear in a selector
+   list, so every dark rule needs a second copy for the system setting. Only
+   the first copy is written by hand. tools/chrome.py writes the second one
+   into the chrome:dark-system region right after it.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -170,7 +171,9 @@
     --shadow-lg: 0 4px 12px rgba(0, 0, 0, .55), 0 60px 100px -44px rgba(0, 0, 0, .95);
 }
 
-/* Dark — the system setting, when the visitor has not chosen */
+/* Dark — the system setting, when the visitor has not chosen. The region is
+   written by tools/chrome.py from the rule above: change that one. */
+/* chrome:dark-system */
 @media (prefers-color-scheme: dark) {
     :root:not([data-appearance="light"]) {
         color-scheme: dark;
@@ -204,6 +207,7 @@
         --shadow-lg: 0 4px 12px rgba(0, 0, 0, .55), 0 60px 100px -44px rgba(0, 0, 0, .95);
     }
 }
+/* /chrome:dark-system */
 
 /* --------------------------------------------------------------------------
    2. Base
@@ -321,14 +325,20 @@ code { font-family: var(--font-mono); font-size: .92em; }
    4. Header
    -------------------------------------------------------------------------- */
 
+/* The header and the mobile sheet that opens under it are the same frosted
+   glass. */
+.nav,
+.sheet {
+    background: var(--scrim);
+    backdrop-filter: saturate(1.6) blur(16px);
+    -webkit-backdrop-filter: saturate(1.6) blur(16px);
+}
+
 .nav {
     position: fixed;
     inset: 0 0 auto 0;
     z-index: 60;
     height: var(--nav-h);
-    background: var(--scrim);
-    backdrop-filter: saturate(1.6) blur(16px);
-    -webkit-backdrop-filter: saturate(1.6) blur(16px);
     border-bottom: 1px solid transparent;
     transition: border-color .3s var(--ease), background .3s var(--ease);
 }
@@ -435,6 +445,11 @@ html:not(.js) .menu__panel[hidden] { display: none; }
 .menu__row:hover { background: var(--surface-2); }
 .menu__row.is-current { background: var(--accent-soft); }
 .menu__icon { width: 30px; height: 30px; border-radius: 7px; flex: none; }
+
+/* An app icon that has a dark version of its own is a <picture> of two
+   files (app_icon in tools/chrome.py). The picture takes the size and the
+   corner, and the image inside fills it. */
+.appicon img { width: 100%; height: 100%; border-radius: inherit; }
 .menu__text { display: grid; gap: .1rem; min-width: 0; }
 .menu__name {
     display: flex;
@@ -538,9 +553,6 @@ html:not(.js) .menu__panel[hidden] { display: none; }
     inset: var(--nav-h) 0 auto 0;
     max-height: calc(100dvh - var(--nav-h));
     overflow-y: auto;
-    background: var(--scrim);
-    backdrop-filter: saturate(1.6) blur(16px);
-    -webkit-backdrop-filter: saturate(1.6) blur(16px);
     border-bottom: 1px solid var(--line);
     transform: translateY(-8px);
     opacity: 0;
@@ -622,7 +634,9 @@ html:not(.js) .sheet[hidden] { display: none; }
     transition: transform .16s var(--ease), background .18s var(--ease),
                 border-color .18s var(--ease), box-shadow .18s var(--ease);
 }
-.btn svg { width: 16px; height: 16px; flex: none; }
+/* The icons come from assets/img/icons.svg. Each place that shows one sets
+   its size and its line weight, as here. */
+.btn svg { width: 16px; height: 16px; flex: none; stroke-width: 2; }
 .btn:active { transform: translateY(1px); }
 
 .btn--primary {
@@ -667,7 +681,7 @@ html:not(.js) .sheet[hidden] { display: none; }
     font-weight: 500;
     text-decoration: none;
 }
-.arrowlink svg { width: 15px; height: 15px; transition: transform .22s var(--ease); }
+.arrowlink svg { width: 15px; height: 15px; stroke-width: 2.2; transition: transform .22s var(--ease); }
 .arrowlink:hover { text-decoration: underline; text-underline-offset: 4px; }
 .arrowlink:hover svg { transform: translateX(3px); }
 
@@ -716,6 +730,14 @@ html:not(.js) .sheet[hidden] { display: none; }
 .split__text h3 { margin-bottom: .9rem; }
 .split__text p { color: var(--ink-2); }
 .split__text p + p { margin-top: .9rem; }
+
+/* A paragraph after a list, and the closing link to read more, stand a
+   little further off than the paragraphs between them. */
+.split__text .facts + p,
+.split__text .split__more { margin-top: 1.3rem; }
+
+/* Several splits in one section, one under the other */
+.split + .split { margin-top: clamp(3.5rem, 7vw, 6rem); }
 
 /* --------------------------------------------------------------------------
    7. Hero
@@ -860,41 +882,6 @@ html:not(.js) .sheet[hidden] { display: none; }
     text-align: center;
 }
 
-/* The macOS window chrome used for hand-drawn illustrations. A hero centres
-   its text; the window inside one is a window and must not. */
-.macwin {
-    text-align: left;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-}
-.macwin__bar {
-    display: flex;
-    align-items: center;
-    gap: .45rem;
-    padding: .6rem .8rem;
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--line);
-}
-.macwin__bar i {
-    width: 11px; height: 11px;
-    border-radius: 50%;
-    background: #d9dde4;
-}
-.macwin--live .macwin__bar i:nth-child(1) { background: #ff5f57; }
-.macwin--live .macwin__bar i:nth-child(2) { background: #febc2e; }
-.macwin--live .macwin__bar i:nth-child(3) { background: #28c840; }
-.macwin__title {
-    margin-left: .6rem;
-    font-size: .76rem;
-    font-family: var(--font-mono);
-    letter-spacing: .03em;
-    color: var(--muted);
-}
-.macwin__body { padding: clamp(1rem, 2.5vw, 1.6rem); }
-
 /* --------------------------------------------------------------------------
    9. Cards, features, facts
    -------------------------------------------------------------------------- */
@@ -937,9 +924,11 @@ a.card h4 { transition: color .2s var(--ease); }
     background: var(--accent-soft);
     color: var(--accent);
 }
-.feature__mark svg { width: 17px; height: 17px; }
+.feature__mark svg { width: 17px; height: 17px; stroke-width: 1.8; }
 .feature h4 { font-size: 1.04rem; margin-bottom: .4rem; }
 .feature p  { font-size: .95rem; line-height: 1.55; color: var(--muted); }
+/* A feature that opens with a picture: the heading keeps clear of it */
+.feature > .shot + h4 { margin-top: 1.2rem; }
 
 .facts {
     display: grid;
@@ -980,8 +969,6 @@ a.card h4 { transition: color .2s var(--ease); }
     color: var(--accent);
     border: 1px solid var(--accent-line);
 }
-.tag--quiet { background: transparent; color: var(--muted); border-color: var(--line-strong); }
-
 /* --------------------------------------------------------------------------
    10. Terminal
    -------------------------------------------------------------------------- */
@@ -1056,6 +1043,7 @@ a.card h4 { transition: color .2s var(--ease); }
     position: absolute;
     left: 0; top: .35em;
     width: 15px; height: 15px;
+    stroke-width: 2.4;
     color: var(--good);
 }
 

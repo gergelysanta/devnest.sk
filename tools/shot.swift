@@ -30,6 +30,11 @@ final class Shooter: NSObject, WKNavigationDelegate {
 
     init(frame: NSRect, output: String, position: String, wantsDark: Bool) {
         let configuration = WKWebViewConfiguration()
+        // No disk cache. The default store keeps one between runs, and
+        // python's http.server sends no Cache-Control, so WebKit may reuse a
+        // stylesheet from an earlier run and photograph the page as it was
+        // before an edit. That happened with themes.css, in September 2026.
+        configuration.websiteDataStore = .nonPersistent()
         self.webView = WKWebView(frame: frame, configuration: configuration)
         self.output = output
         self.position = position

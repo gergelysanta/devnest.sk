@@ -1,17 +1,76 @@
 /* ==========================================================================
    devnest.sk
    Plain ES2019, no framework and no build step. A handful of small jobs:
-   the appearance switch, the header, the apps menu, the scroll reveals, the
-   numbers that count up, the pointer parallax on the home stage, and the
-   drift of a figure as it goes by.
+   the appearance switch, the header, the apps menu, the manual's sidebar and
+   its "On this page", the scroll reveals, the numbers that count up, the
+   pointer parallax on the home stage, and the drift of a figure as it goes
+   by.
    ========================================================================== */
 
 (function () {
     "use strict";
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     function each(list, fn) { Array.prototype.forEach.call(list, fn); }
+
+    /* ----------------------------------------------------------------------
+       Helpers the jobs below share
+       ---------------------------------------------------------------------- */
+
+    /* Runs fn now, and again at most once per frame while the page scrolls.
+       With withResize it also runs when the window changes size. */
+    function onScroll(fn, withResize) {
+        var queued = false;
+        window.addEventListener("scroll", function () {
+            if (queued) return;
+            queued = true;
+            window.requestAnimationFrame(function () {
+                queued = false;
+                fn();
+            });
+        }, { passive: true });
+        if (withResize) window.addEventListener("resize", fn);
+        fn();
+    }
+
+    /* Calls fn(element) once for each element, the first time it comes into
+       view. The caller checks that IntersectionObserver exists. */
+    function onFirstSight(items, options, fn) {
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                observer.unobserve(entry.target);
+                fn(entry.target);
+            });
+        }, options);
+        each(items, function (el) { observer.observe(el); });
+    }
+
+    /* Opens or closes a menu, a sheet or a list: the class is for the CSS,
+       and aria-expanded tells a screen reader what the button did. */
+    function setOpen(box, button, state) {
+        box.classList.toggle("is-open", state);
+        button.setAttribute("aria-expanded", state ? "true" : "false");
+    }
+
+    /* Calls write(element, box, viewportHeight) for every element of the
+       selector that is on screen or near it, as the page scrolls. Both kinds
+       of drift at the end of this file are built on it. */
+    function driftEach(selector, write) {
+        var items = document.querySelectorAll(selector);
+        if (!items.length || reduced) return;
+
+        onScroll(function () {
+            var height = window.innerHeight;
+            each(items, function (el) {
+                var box = el.getBoundingClientRect();
+                if (box.bottom < -200 || box.top > height + 200) return;
+                write(el, box, height);
+            });
+        }, true);
+    }
 
     /* ----------------------------------------------------------------------
        Appearance
@@ -92,17 +151,9 @@
         var nav = document.querySelector("[data-nav]");
         if (!nav) return;
 
-        var ticking = false;
-        function update() {
-            ticking = false;
+        onScroll(function () {
             nav.classList.toggle("is-stuck", window.scrollY > 6);
-        }
-        window.addEventListener("scroll", function () {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(update);
-        }, { passive: true });
-        update();
+        });
     }
 
     /* ----------------------------------------------------------------------
@@ -156,7 +207,6 @@
         var button = menu.querySelector(".menu__btn");
         var panel = menu.querySelector(".menu__panel");
         var timer = null;
-        var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
         /* The panel is marked hidden in the markup so that it stays closed
            without JavaScript. From here on it is CSS that opens and closes it. */
@@ -164,8 +214,7 @@
 
         function open(state) {
             window.clearTimeout(timer);
-            menu.classList.toggle("is-open", state);
-            button.setAttribute("aria-expanded", state ? "true" : "false");
+            setOpen(menu, button, state);
         }
 
         button.addEventListener("click", function (e) {
@@ -173,7 +222,7 @@
             open(!menu.classList.contains("is-open"));
         });
 
-        if (fine) {
+        if (finePointer) {
             menu.addEventListener("mouseenter", function () { open(true); });
             menu.addEventListener("mouseleave", function () {
                 window.clearTimeout(timer);
@@ -206,8 +255,7 @@
         sheet.hidden = false;
 
         function open(state) {
-            sheet.classList.toggle("is-open", state);
-            button.setAttribute("aria-expanded", state ? "true" : "false");
+            setOpen(sheet, button, state);
             document.body.style.overflow = state ? "hidden" : "";
         }
 
@@ -217,8 +265,15 @@
         each(sheet.querySelectorAll("a"), function (a) {
             a.addEventListener("click", function () { open(false); });
         });
+
+        /* The sheet belongs to the narrow layout. Once the window is wide
+           enough for the header's own links, the CSS hides the button, and an
+           open sheet closes with it. Asking the button, instead of repeating
+           the width of the CSS breakpoint here, keeps that width in one place. */
         window.addEventListener("resize", function () {
-            if (window.innerWidth > 860) open(false);
+            if (sheet.classList.contains("is-open") && getComputedStyle(button).display === "none") {
+                open(false);
+            }
         });
     }
 
@@ -238,9 +293,7 @@
         if (!button) return;
 
         button.addEventListener("click", function () {
-            var open = !nav.classList.contains("is-open");
-            nav.classList.toggle("is-open", open);
-            button.setAttribute("aria-expanded", open ? "true" : "false");
+            setOpen(nav, button, !nav.classList.contains("is-open"));
         });
     }
 
@@ -284,9 +337,7 @@
         map.appendChild(list);
         map.hidden = false;
 
-        var ticking = false;
-        function update() {
-            ticking = false;
+        onScroll(function () {
             /* The heading in force is the last one that has gone past the top
                of the reading area, not the one nearest the middle: that is the
                one whose text the reader is under. */
@@ -298,20 +349,14 @@
             links.forEach(function (link, i) {
                 link.classList.toggle("is-here", i === here);
             });
-        }
-        window.addEventListener("scroll", function () {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(update);
-        }, { passive: true });
-        update();
+        });
     }
 
     /* ----------------------------------------------------------------------
        Scroll reveals
 
-       One observer drives three things that all want the same trigger: the
-       fade-up of a block, the fill of a ring, and the wipe of a screenshot.
+       One trigger drives three things: the fade-up of a block, the fill of a
+       ring, and the wipe of a screenshot.
        ---------------------------------------------------------------------- */
 
     function setupReveal() {
@@ -323,7 +368,7 @@
             });
         });
 
-        var items = document.querySelectorAll(".reveal, .ring, .wipe, .sorter, .stagger");
+        var items = document.querySelectorAll(".reveal, .ring, .wipe, .stagger");
         if (!items.length) return;
 
         if (reduced || !("IntersectionObserver" in window)) {
@@ -331,19 +376,13 @@
             return;
         }
 
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add("is-in");
-                observer.unobserve(entry.target);
-            });
-            /* threshold 0, not a fraction: the fraction is of the element's
-               own area, so a block much taller than the window could never
-               reach it and would stay invisible for good. The margin at the
-               bottom is what keeps a sliver at the very edge from counting. */
-        }, { rootMargin: "0px 0px -8% 0px", threshold: 0 });
-
-        each(items, function (el) { observer.observe(el); });
+        /* threshold 0, not a fraction: the fraction is of the element's own
+           area, so a block much taller than the window could never reach it
+           and would stay invisible for good. The margin at the bottom is what
+           keeps a sliver at the very edge from counting. */
+        onFirstSight(items, { rootMargin: "0px 0px -8% 0px", threshold: 0 }, function (el) {
+            el.classList.add("is-in");
+        });
     }
 
     /* ----------------------------------------------------------------------
@@ -358,17 +397,7 @@
         var items = document.querySelectorAll("[data-count]");
         if (!items.length || reduced || !("IntersectionObserver" in window)) return;
 
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                run(entry.target);
-                observer.unobserve(entry.target);
-            });
-        }, { threshold: 0.6 });
-
-        each(items, function (el) { observer.observe(el); });
-
-        function run(el) {
+        onFirstSight(items, { threshold: 0.6 }, function (el) {
             var to = parseFloat(el.getAttribute("data-count"));
             var decimals = (el.getAttribute("data-count").split(".")[1] || "").length;
             var started = null;
@@ -383,7 +412,7 @@
             }
             el.textContent = (0).toFixed(decimals);
             window.requestAnimationFrame(frame);
-        }
+        });
     }
 
     /* ----------------------------------------------------------------------
@@ -396,8 +425,7 @@
 
     function setupStage() {
         var stage = document.querySelector("[data-stage]");
-        if (!stage || reduced) return;
-        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+        if (!stage || reduced || !finePointer) return;
 
         var range = 14;   /* pixels at the edge of the window, before --depth */
         var queued = false;
@@ -417,32 +445,18 @@
     }
 
     /* ----------------------------------------------------------------------
-       Parallax drift for anything marked .parallax
+       Drift for anything marked .parallax
+
+       The block moves against the scroll in proportion to how far its middle
+       is from the middle of the window. data-speed is the proportion.
        ---------------------------------------------------------------------- */
 
     function setupParallax() {
-        var items = document.querySelectorAll(".parallax");
-        if (!items.length || reduced) return;
-
-        var ticking = false;
-        function update() {
-            ticking = false;
-            var mid = window.innerHeight / 2;
-            each(items, function (el) {
-                var box = el.getBoundingClientRect();
-                if (box.bottom < -200 || box.top > window.innerHeight + 200) return;
-                var speed = parseFloat(el.getAttribute("data-speed") || "0.06");
-                var shift = (box.top + box.height / 2 - mid) * -speed;
-                el.style.setProperty("--shift", shift.toFixed(1) + "px");
-            });
-        }
-        window.addEventListener("scroll", function () {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(update);
-        }, { passive: true });
-        window.addEventListener("resize", update);
-        update();
+        driftEach(".parallax", function (el, box, height) {
+            var speed = parseFloat(el.getAttribute("data-speed") || "0.06");
+            var shift = (box.top + box.height / 2 - height / 2) * -speed;
+            el.style.setProperty("--shift", shift.toFixed(1) + "px");
+        });
     }
 
     /* ----------------------------------------------------------------------
@@ -450,35 +464,18 @@
 
        The same idea as .parallax, but measured against the element's own
        travel through the viewport rather than against the page, and clamped:
-       a figure drifts at most --range pixels from where it was laid out, so
-       it never separates from the text it belongs to. The amount goes into
+       a figure drifts at most data-range pixels from where it was laid out,
+       so it never separates from the text it belongs to. The amount goes into
        --drift, in pixels, and the CSS decides what to do with it.
        ---------------------------------------------------------------------- */
 
     function setupSettle() {
-        var items = document.querySelectorAll(".settle");
-        if (!items.length || reduced) return;
-
-        var ticking = false;
-        function update() {
-            ticking = false;
-            var height = window.innerHeight;
-            each(items, function (el) {
-                var box = el.getBoundingClientRect();
-                if (box.bottom < -200 || box.top > height + 200) return;
-                var range = parseFloat(el.getAttribute("data-range") || "18");
-                /* -1 with the element below the fold, +1 once it is above it */
-                var progress = 1 - 2 * ((box.top + box.height / 2) / height);
-                el.style.setProperty("--drift", (progress * range).toFixed(1));
-            });
-        }
-        window.addEventListener("scroll", function () {
-            if (ticking) return;
-            ticking = true;
-            window.requestAnimationFrame(update);
-        }, { passive: true });
-        window.addEventListener("resize", update);
-        update();
+        driftEach(".settle", function (el, box, height) {
+            var range = parseFloat(el.getAttribute("data-range") || "18");
+            /* -1 with the element below the fold, +1 once it is above it */
+            var progress = 1 - 2 * ((box.top + box.height / 2) / height);
+            el.style.setProperty("--drift", (progress * range).toFixed(1));
+        });
     }
 
     /* ----------------------------------------------------------------------

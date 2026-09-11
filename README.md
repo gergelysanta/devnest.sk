@@ -22,8 +22,9 @@ assets/css/site.css     Tokens, the header, the sections, the components
 assets/css/themes.css   Per-app colour skins, and the drawn scenes
 assets/js/site.js       Appearance switch, reveals, menus, parallax, counters, drift
 assets/img/             App icons and screenshots
+assets/img/icons.svg    Every icon used inside the text, drawn once
 assets/fonts/           Instrument Sans and IBM Plex Mono, with their licences
-tools/chrome.py         Keeps the header, the footer and the manual's sidebar in step
+tools/chrome.py         Writes every part that repeats: see "One place for everything"
 tools/shot.swift        Photographs a section of the site without a browser window
 tools/og.swift          Redraws assets/img/brand/og.png, the link preview card
 ```
@@ -40,38 +41,99 @@ python3 -m http.server 8765 --directory .
 Then open <http://localhost:8765>. `.claude/launch.json` starts the same server
 from an editor that reads it.
 
-## Editing the header or the footer
+## One place for everything that repeats
 
-They exist once, in `tools/chrome.py`, and are written into every page between
-comment markers:
-
-```html
-<!-- chrome:nav -->  … generated, do not edit by hand …  <!-- /chrome:nav -->
-```
-
-Change the template (or add a page to `PAGES`), then:
+Every part that appears on more than one page is written once, and changing it
+there changes it on every page. Most of it lives in `tools/chrome.py`, which
+writes it into the files between comment markers. The files stay complete, so
+the host still serves them as they are.
 
 ```bash
-python3 tools/chrome.py          # rewrite every page
-python3 tools/chrome.py --check  # exit 1 if a page is out of date
+python3 tools/chrome.py          # rewrite every file
+python3 tools/chrome.py --check  # exit 1 if a file is out of date
 ```
 
-Everything outside the markers is the page's own and is never touched.
+| To change …                                             | edit …                                   |
+| ------------------------------------------------------- | ---------------------------------------- |
+| `<head>`, the header, the footer                        | `HEAD`, `NAV`, `FOOTER` in `chrome.py`   |
+| an app's name, icon, dot, menu line or home-page card   | `APPS` in `chrome.py`                    |
+| an app's App Store link, on every badge                 | `store` in `APPS`                        |
+| the company links in the header, the sheet, the footer  | `COMPANY_PAGES` in `chrome.py`           |
+| a manual's pages, titles, groups and order              | `MANUALS` in `chrome.py`                 |
+| a page's title and description                          | `PAGES` (a manual page: `MANUALS`)       |
+| how a component looks                                   | `assets/css/site.css`                    |
+| an app's colours, the drawn scenes                      | `assets/css/themes.css`                  |
+| an icon                                                 | `assets/img/icons.svg`                   |
+| what a component does                                   | `assets/js/site.js`                      |
+
+Every page has two regions, one at each end. Everything between them is the
+page's own and is never touched:
+
+```html
+<!doctype html>
+<html lang="en">
+<!-- chrome:top -->
+<!-- /chrome:top -->
+    … the page's own content …
+<!-- chrome:bottom -->
+<!-- /chrome:bottom -->
+</html>
+```
+
+`top` holds `<head>`, the `<body>` tag with the app's skin, the header, and the
+opening of the page's layout. `bottom` closes the layout and holds the footer.
+The layout is `page` (the home page and the app pages), `prose` (the company
+pages) or `docs` (a page of a manual).
+
+A page can also ask for a component inside its own content. The marker must
+start its line, and the script fills it in:
+
+```html
+<!-- chrome:store-badge -->             <!-- /chrome:store-badge -->
+<!-- chrome:app-cards -->               <!-- /chrome:app-cards -->
+<!-- chrome:doc-cards dates/ first-scan/ -->  <!-- /chrome:doc-cards -->
+```
+
+`store-badge` is Apple's badge linked to the page's app. `app-cards` is a card
+per app. `doc-cards` is a card per named page of the app's manual, with the
+page's own title and blurb.
+
+An icon is pointed at, not copied. Its size and line weight come from the CSS
+of the place it sits in:
+
+```html
+<svg aria-hidden="true"><use href="/assets/img/icons.svg#arrow"></use></svg>
+```
 
 ## Adding a page
 
-1. Copy an existing page and keep its marker pairs.
-2. Add it to `PAGES` in `tools/chrome.py` with its URL, title and description —
-   and `"app": "<id>"` if it belongs to one of the apps, which skins it and puts
-   the app's name beside DevNest in the header.
-3. Run `python3 tools/chrome.py`.
-4. Add it to `sitemap.xml`.
+1. Create the file with the two region pairs from above, and the page's own
+   content between them.
+2. Add it to `PAGES` in `tools/chrome.py` with its URL, title and description,
+   `"layout"` if it is not a `page`, and `"app": "<id>"` if it belongs to one of
+   the apps. That skins it and puts the app's name beside DevNest in the header.
+3. Run `python3 tools/chrome.py`. That also puts the page in `sitemap.xml`.
 
-A page of a **manual** is added to `DOCS` instead. That one entry gives it its
-metadata in `PAGES`, its place in the sidebar (`<!-- chrome:docsnav -->`) and its
-previous/next links (`<!-- chrome:docsfeet -->`), so inserting a page in the
-middle of the book re-links its neighbours by itself. The "On this page" column
-is built by `site.js` from the page's own `<h2>`s and needs no markup at all.
+A page of a **manual** is added to `MANUALS` instead. That one entry gives it its
+title, its description, its place in the sidebar, the group label above its
+title and its previous and next links. Inserting a page in the middle of the
+book re-links its neighbours by itself. The page file holds only what comes
+after the `<h1>`: the lead paragraph and the text. The "On this page" column is
+built by `site.js` from the page's own `<h2>`s and needs no markup at all.
+
+A **new app's manual** is a new entry in `MANUALS`, keyed by the app's id. Its
+pages live under the app's URL + `docs/`, and the app's page gets the header's
+"Read the manual" button with `"nav_cta": True`.
+
+## Dark colours
+
+Write a dark value once, in the `:root[data-appearance="dark"]` rule. That rule
+serves a visitor who picked dark with the button in the header. A visitor who
+picked nothing, on a dark system, needs the same values inside a
+`prefers-color-scheme` media query. A CSS rule cannot say both at once, so
+`tools/chrome.py` writes that second copy into the `/* chrome:dark-system */`
+region after the rule. A new app's skin needs such a region after its dark
+rule; the script stops with an error if it is missing.
 
 ## Screenshots
 
@@ -162,9 +224,10 @@ Four things are still open:
    file path of the selected picture, and that path is a folder inside the
    developer's home directory. Check both sets before publishing, and retake
    anything that should not be public.
-3. **The App Store link.** Both buttons on the AssetScout page point at
+3. **The App Store link.** Every AssetScout badge points at
    `https://apps.apple.com/app/assetscout`, which is a guess. Swap in the real
-   product URL — it is marked `TODO` in the HTML, and it appears twice.
+   product URL: it is `store` in `APPS` in `tools/chrome.py`, marked `TODO`.
+   Then run the script.
 4. **Four figures the manual has no picture for**: the scan control while a scan
    runs, the two settings panes, and the *Show Skipped Files* sheet. Each needs a
    light and a dark capture of the same window.

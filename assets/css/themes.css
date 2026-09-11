@@ -13,22 +13,27 @@
 /* --------------------------------------------------------------------------
    1. App skins
 
-   Each app declares its light values on [data-app], then its dark values
-   twice — once for the explicit choice, once for the system default. The
-   colours are the app's own: Tracktiv's from Assets.xcassets, AssetScout's
-   from the two fills in AppIcon.icon.
+   Each app declares its light values on [data-app], and its dark values on
+   :root[data-appearance="dark"] [data-app]. tools/chrome.py copies the dark
+   values into the region after them, for a visitor whose system is dark.
+
+   The selector is [data-app] and not body[data-app], so anything can wear an
+   app's colours: the <body> of the app's own pages, and the app's card on
+   the home page.
+
+   The colours are the app's own: Tracktiv's from Assets.xcassets,
+   AssetScout's from the two fills in AppIcon.icon.
    -------------------------------------------------------------------------- */
 
 /* Tracktiv — the blue of the app icon, the green of its ring ------------- */
 
-body[data-app="tracktiv"] {
+[data-app="tracktiv"] {
     --accent:      #2f6fcc;
     --accent-2:    #6aa4e8;
     --accent-ink:  #ffffff;
     --accent-soft: rgba(47, 111, 204, .11);
     --accent-line: rgba(47, 111, 204, .36);
     --ring:        #4da368;
-    --over:        #d92d30;
 
     /* The category colours Tracktiv paints a day with */
     --c-activity:  #82c9be;
@@ -39,26 +44,26 @@ body[data-app="tracktiv"] {
     --c-fun:       #89c167;
     --c-browsing:  #77c589;
 }
-:root[data-appearance="dark"] body[data-app="tracktiv"] {
+:root[data-appearance="dark"] [data-app="tracktiv"] {
     --accent:      #4fa3ff;
     --accent-2:    #8cc6ff;
     --accent-ink:  #04121f;
     --accent-soft: rgba(79, 163, 255, .16);
     --accent-line: rgba(79, 163, 255, .42);
     --ring:        #7cc98c;
-    --over:        #ff5a5c;
 }
+/* chrome:dark-system */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-appearance="light"]) body[data-app="tracktiv"] {
+    :root:not([data-appearance="light"]) [data-app="tracktiv"] {
         --accent:      #4fa3ff;
         --accent-2:    #8cc6ff;
         --accent-ink:  #04121f;
         --accent-soft: rgba(79, 163, 255, .16);
         --accent-line: rgba(79, 163, 255, .42);
         --ring:        #7cc98c;
-        --over:        #ff5a5c;
     }
 }
+/* /chrome:dark-system */
 
 /* AssetScout — the amber of the icon, over the charcoal of its label ------
 
@@ -68,7 +73,7 @@ body[data-app="tracktiv"] {
    colour itself becomes --accent-2. On a dark page the amber is bright
    enough on its own, so there it is the accent. */
 
-body[data-app="assetscout"] {
+[data-app="assetscout"] {
     --accent:      #a9631b;
     --accent-2:    #e8a24a;
     --accent-ink:  #ffffff;
@@ -76,7 +81,7 @@ body[data-app="assetscout"] {
     --accent-line: rgba(169, 99, 27, .34);
     --label:       #2a2f33;
 }
-:root[data-appearance="dark"] body[data-app="assetscout"] {
+:root[data-appearance="dark"] [data-app="assetscout"] {
     --accent:      #e8a24a;
     --accent-2:    #f4c68d;
     --accent-ink:  #231703;
@@ -84,8 +89,9 @@ body[data-app="assetscout"] {
     --accent-line: rgba(232, 162, 74, .42);
     --label:       #f1eadd;
 }
+/* chrome:dark-system */
 @media (prefers-color-scheme: dark) {
-    :root:not([data-appearance="light"]) body[data-app="assetscout"] {
+    :root:not([data-appearance="light"]) [data-app="assetscout"] {
         --accent:      #e8a24a;
         --accent-2:    #f4c68d;
         --accent-ink:  #231703;
@@ -94,6 +100,7 @@ body[data-app="assetscout"] {
         --label:       #f1eadd;
     }
 }
+/* /chrome:dark-system */
 
 /* ==========================================================================
    2. Scenes
@@ -480,20 +487,13 @@ body[data-app="assetscout"] {
     isolation: isolate;
     transition: transform .35s var(--ease), border-color .25s var(--ease), box-shadow .35s var(--ease);
 }
-/* Each card carries its own app's colour, so the row of them reads as three
-   products rather than three copies of one. */
-.appcard[data-app="tracktiv"]  { --card: #2f6fcc; }
-.appcard[data-app="assetscout"] { --card: #a9631b; }
-:root[data-appearance="dark"] .appcard[data-app="tracktiv"]  { --card: #4fa3ff; }
-:root[data-appearance="dark"] .appcard[data-app="assetscout"] { --card: #e8a24a; }
-@media (prefers-color-scheme: dark) {
-    :root:not([data-appearance="light"]) .appcard[data-app="tracktiv"]  { --card: #4fa3ff; }
-    :root:not([data-appearance="light"]) .appcard[data-app="assetscout"] { --card: #e8a24a; }
-}
+/* Each card carries its app's data-app, so it wears the app's skin from part
+   1 and --accent is the app's own colour. The row of cards then reads as
+   several products rather than several copies of one. */
 
 .appcard:hover {
     transform: translateY(-4px);
-    border-color: color-mix(in srgb, var(--card) 45%, var(--line));
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
     box-shadow: var(--shadow-md);
 }
 
@@ -512,8 +512,8 @@ body[data-app="assetscout"] {
     inset: -1.6rem -1.6rem -4.6rem -1.6rem;
     z-index: -1;
     background: linear-gradient(to bottom,
-        color-mix(in srgb, var(--card) 20%, var(--surface)) 0,
-        color-mix(in srgb, var(--card) 20%, var(--surface)) 4.5rem,
+        color-mix(in srgb, var(--accent) 20%, var(--surface)) 0,
+        color-mix(in srgb, var(--accent) 20%, var(--surface)) 4.5rem,
         transparent 9rem);
     opacity: 0;
     transition: opacity .35s var(--ease);
@@ -527,8 +527,6 @@ body[data-app="assetscout"] {
     box-shadow: var(--shadow-sm);
     transition: transform .35s var(--ease);
 }
-/* An icon that has a dark version of its own is a .pair of two images. */
-.appcard__icon img { width: 100%; height: 100%; border-radius: inherit; }
 .appcard:hover .appcard__icon { transform: scale(1.06) rotate(-3deg); }
 .appcard__name { font-size: 1.16rem; font-weight: 600; letter-spacing: -.02em; }
 .appcard__state {
@@ -548,9 +546,9 @@ body[data-app="assetscout"] {
     gap: .4rem;
     font-size: .9rem;
     font-weight: 500;
-    color: var(--card);
+    color: var(--accent);
 }
-.appcard__go svg { width: 15px; height: 15px; transition: transform .25s var(--ease); }
+.appcard__go svg { width: 15px; height: 15px; stroke-width: 2.2; transition: transform .25s var(--ease); }
 .appcard:hover .appcard__go svg { transform: translateX(3px); }
 
 /* --------------------------------------------------------------------------
@@ -573,7 +571,6 @@ body[data-app="assetscout"] {
 }
 .ring.is-in .ring__value,
 html:not(.js) .ring__value { stroke-dashoffset: calc(var(--circ, 314) * (1 - var(--p, .6))); }
-.ring__over { stroke: var(--over, var(--bad)); }
 
 /* The day strip is a real screenshot, wiped in from the left as if the day
    were being written while you watch. */
@@ -617,7 +614,6 @@ html:not(.js) .ring__value { stroke-dashoffset: calc(var(--circ, 314) * (1 - var
    not out yet
    -------------------------------------------------------------------------- */
 
-
 .roadmap { display: grid; gap: .1rem; margin: 0; padding: 0; list-style: none; }
 .roadmap li {
     display: grid;
@@ -630,23 +626,5 @@ html:not(.js) .ring__value { stroke-dashoffset: calc(var(--circ, 314) * (1 - var
     color: var(--ink-2);
 }
 .roadmap li:last-child { border-bottom: 0; }
-.roadmap svg { width: 18px; height: 18px; margin-top: .18em; color: var(--accent); }
+.roadmap svg { width: 18px; height: 18px; margin-top: .18em; stroke-width: 2.2; color: var(--accent); }
 .roadmap b { display: block; color: var(--ink); font-weight: 600; }
-
-/* --------------------------------------------------------------------------
-   2.5 A quiet notice strip — used for "not released yet" and similar
-   -------------------------------------------------------------------------- */
-
-.notice {
-    display: flex;
-    gap: .9rem;
-    align-items: flex-start;
-    padding: 1.1rem 1.3rem;
-    border: 1px solid var(--accent-line);
-    border-radius: var(--r-md);
-    background: var(--accent-soft);
-    font-size: .95rem;
-    color: var(--ink-2);
-}
-.notice svg { width: 19px; height: 19px; flex: none; margin-top: .15em; color: var(--accent); }
-.notice a { color: var(--accent); }
