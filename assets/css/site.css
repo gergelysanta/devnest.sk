@@ -484,6 +484,40 @@ html:not(.js) .menu__panel[hidden] { display: none; }
 :root[data-appearance="dark"]  .appearance .icon-moon   { display: block; }
 :root:not([data-appearance]) .appearance .icon-system   { display: block; }
 
+/* A product page's own buttons, repeated in the header once they have
+   scrolled away. site.js adds .has-cta to the header, and the buttons fade
+   in and out. Only the opacity changes: Apple asks that the badge itself is
+   not animated, so it never moves.
+   The hidden buttons keep their place, so nothing else in the header moves
+   when they come and go. Both auto margins centre them in the free space
+   between the logo and the links. On the desktop layout they are centred
+   on the header itself instead (see the media queries below).
+   40px is Apple's smallest allowed badge height on screen. It leaves 9px
+   above and below in the 58px header. At 40px the badge corner reads as
+   6.8px (see .store-badge), so the button beside it gets 7px. The .7rem gap
+   keeps Apple's clear space of a quarter of the badge height (10px). */
+.nav__cta {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    flex: none;
+    margin-inline: auto;
+    opacity: 0;
+    visibility: hidden;     /* keeps the hidden links out of the tab order */
+    transition: opacity .25s var(--ease), visibility .25s;
+}
+.nav.has-cta .nav__cta { opacity: 1; visibility: visible; }
+.nav__cta + .nav__links { margin-left: 0; }
+.nav__cta .store-badge { border-radius: 7px; }
+.nav__cta .store-badge img { height: 40px; }
+.nav__cta .btn {
+    height: 40px;
+    padding-block: 0;
+    padding-inline: .95rem;
+    border-radius: 7px;
+    font-size: .88rem;
+}
+
 .burger { display: none; position: relative; }
 .burger span {
     position: absolute;
@@ -537,7 +571,36 @@ html:not(.js) .sheet[hidden] { display: none; }
 @media (max-width: 860px) {
     .nav__links { display: none; }
     .appearance { margin-left: auto; }
+    .nav__cta ~ .appearance { margin-left: 0; }
     .burger { display: grid; }
+}
+
+/* On the desktop layout the page's buttons are centred on the header, in
+   line with the centred hero below it. They leave the row, so the links go
+   back to their own auto margin. */
+@media (min-width: 861px) {
+    .nav__inner { position: relative; }
+    .nav__cta {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: 0;
+        transform: translate(-50%, -50%);
+    }
+    .nav__cta + .nav__links { margin-left: auto; }
+}
+
+/* The header has room for both of the page's buttons only at some widths.
+   Measured on the desktop layout: centred, both buttons leave 27px before
+   the links at 1040px, but only 7px at 1000px. On the narrow layout the
+   whole row needs 648px, and the badge alone 495px. Below that nothing is
+   repeated. */
+@media (min-width: 861px) and (max-width: 1039px), (max-width: 719px) {
+    .nav__cta .btn { display: none; }
+}
+@media (max-width: 559px) {
+    .nav__cta { display: none; }
+    .nav__cta ~ .appearance { margin-left: auto; }
 }
 
 /* --------------------------------------------------------------------------
@@ -576,6 +639,24 @@ html:not(.js) .sheet[hidden] { display: none; }
     background: transparent;
 }
 .btn--ghost:hover { background: var(--surface); border-color: var(--accent-line); }
+
+/* Apple's official App Store badge, used as a link in place of a button.
+   The artwork is Apple's file, unchanged. Apple's guidelines say not to
+   modify or animate it, so it has no hover effect. They also ask for at
+   least 40px of height on screen. 52px is the measured height of a .btn,
+   so the badge lines up with a button next to it.
+   The badge's corner can not change, so a button beside it takes the
+   badge's corner instead. The corner curve passes 1.997 units in from both
+   edges at 45° (measured from the SVG path). A circle through that point has
+   a radius of 1.997 / (1 - cos 45°) = 6.8 units. At 52px the badge is 1.3×
+   its 40-unit artwork, so the corner reads as about 8.9px, which is --r-sm. */
+.store-badge {
+    display: inline-flex;
+    flex: none;
+    border-radius: var(--r-sm);
+}
+.store-badge img { display: block; width: auto; height: 52px; }
+.cta-row:has(.store-badge) .btn { border-radius: var(--r-sm); }
 
 /* A link that reads as the next step, without being a button */
 .arrowlink {

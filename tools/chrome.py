@@ -58,6 +58,11 @@ APPS = [
         "state": "shipping",
         "state_label": "App Store",
         "summary": "Finds the file when you know the date, not the folder.",
+        # The header repeats the page's two buttons with these links (see
+        # NAV_CTA). TODO: swap in the real product URL once the listing is
+        # live, here and twice in apps/assetscout/index.html.
+        "store": "https://apps.apple.com/app/assetscout",
+        "manual": "/apps/assetscout/docs/",
     },
 ]
 
@@ -136,7 +141,9 @@ DOCS = [
 ]
 
 # path → the page's own metadata. `app` skins the page and names it in the
-# header; leave it out for the company pages.
+# header; leave it out for the company pages. `nav_cta` repeats the app's
+# store badge and manual link in the header, once the page's own ones have
+# scrolled away.
 PAGES = {
     "index.html": {
         "url": "/",
@@ -156,6 +163,7 @@ PAGES = {
     "apps/assetscout/index.html": {
         "url": "/apps/assetscout/",
         "app": "assetscout",
+        "nav_cta": True,
         "title": "AssetScout — find the file when you know the date · DevNest",
         "description": "AssetScout walks a folder and lays out every picture, video, "
                        "recording and document it finds in the order they were made, "
@@ -269,7 +277,7 @@ NAV = """<header class="nav" data-nav>
 
         <a class="brand" href="/">
             {logo}{product}
-        </a>
+        </a>{cta}
 
         <nav class="nav__links" aria-label="Main">
             <div class="menu" data-menu>
@@ -314,6 +322,19 @@ NAV = """<header class="nav" data-nav>
         </div>
     </div>
 </header>"""
+
+# The page's two buttons, repeated in the header. They stay hidden until
+# site.js sees that no store badge of the page itself is on screen. Apple
+# asks for one badge per layout, so the header copy never shows next to one.
+NAV_CTA = """
+
+        <div class="nav__cta" data-nav-cta>
+            <a class="store-badge" href="{store}" target="_blank" rel="noopener">
+                <img src="/assets/img/badges/download-on-the-mac-app-store.svg"
+                     alt="Download on the Mac App Store" width="156" height="40">
+            </a>
+            <a class="btn btn--ghost" href="{manual}">Read the manual</a>
+        </div>"""
 
 DOCSNAV = """<nav class="docside" data-docside aria-label="Manual">
     <button class="docside__btn" type="button" aria-expanded="false" aria-controls="docside-list">
@@ -378,13 +399,17 @@ def build_nav(meta):
         MENU_ROW.format(current=" is-current" if a["id"] == app_id else "", **a) for a in APPS
     )
     product = ""
+    cta = ""
     if app_id:
-        name = next(a["name"] for a in APPS if a["id"] == app_id)
+        app = next(a for a in APPS if a["id"] == app_id)
         product = ('\n            <span class="brand__sep" aria-hidden="true">/</span>'
-                   '\n            <span class="brand__product">%s</span>' % name)
+                   '\n            <span class="brand__product">%s</span>' % app["name"])
+        if meta.get("nav_cta"):
+            cta = NAV_CTA.format(store=app["store"], manual=app["manual"])
     return NAV.format(
         logo=LOGO,
         product=product,
+        cta=cta,
         menu_rows=rows,
         apps_current=" is-current" if app_id else "",
         company_current=' class="is-current"' if meta["url"].startswith("/company") else "",

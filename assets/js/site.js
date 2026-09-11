@@ -106,6 +106,42 @@
     }
 
     /* ----------------------------------------------------------------------
+       Header: the page's own buttons, once they have scrolled away
+
+       A product page repeats its store badge and its second button in the
+       header (NAV_CTA in tools/chrome.py). The copy shows only when no store
+       badge of the page itself is on screen, and the first one is above the
+       window. Apple asks for one badge per layout, so the header copy steps
+       aside again when the closing section's badge comes into view.
+       ---------------------------------------------------------------------- */
+
+    function setupNavCta() {
+        var nav = document.querySelector("[data-nav]");
+        var cta = document.querySelector("[data-nav-cta]");
+        if (!nav || !cta || !("IntersectionObserver" in window)) return;
+
+        var badges = Array.prototype.filter.call(
+            document.querySelectorAll(".store-badge"),
+            function (badge) { return !cta.contains(badge); }
+        );
+        if (!badges.length) return;
+
+        var visible = new Set();
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) visible.add(entry.target);
+                else visible.delete(entry.target);
+            });
+            var past = badges[0].getBoundingClientRect().bottom < nav.offsetHeight;
+            nav.classList.toggle("has-cta", visible.size === 0 && past);
+            /* The top margin is the header's height, so a badge that has gone
+               under the header already counts as off screen. */
+        }, { rootMargin: "-" + nav.offsetHeight + "px 0px 0px 0px", threshold: 0 });
+
+        badges.forEach(function (badge) { observer.observe(badge); });
+    }
+
+    /* ----------------------------------------------------------------------
        The apps menu
 
        Opens on hover for a pointer and on click for everything else, and the
@@ -458,6 +494,7 @@
     function boot() {
         setupAppearance();
         setupNav();
+        setupNavCta();
         setupMenu();
         setupSheet();
         setupDocnav();
