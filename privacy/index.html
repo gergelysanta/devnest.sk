@@ -147,9 +147,9 @@
         <div class="reveal" style="--delay: 150ms">
             <h2>The apps</h2>
             <p>
-                Tracktiv and AssetScout store their data locally, in the container macOS gives
-                them on your own machine. Neither has an account, a login or a sync service, and
-                neither sends what it records to us or to anybody else.
+                Our apps store their data locally, in the container macOS gives them on your own
+                machine. None of them has an account, a login or a sync service, and none of
+                them sends what it records to us or to anybody else.
             </p>
             <p>
                 We therefore hold no personal data from the apps at all. There is nothing for us
@@ -161,14 +161,24 @@
             <p>
                 Tracktiv is not built with the network permission macOS requires, so the system
                 would refuse to let it reach the internet even if it tried. It records which
-                application is in front of you and what its window is called, and it stores that
-                on your Mac in order to draw your day. It does not read the contents of any
-                document, and it does not use the Accessibility permission that would let it see
-                what you type.
+                application is in front of you and for how long, and the activities you track.
+                It stores that on your Mac in order to draw your day. It does not read the
+                contents of any document, and it does not use the Accessibility permission that
+                would let it see what you type.
             </p>
             <p>
-                Where a trigger you set up asks Tracktiv to read a title bar as pixels, that
-                reading happens on your Mac and neither the image nor the text is kept.
+                Triggers need one more permission: Screen Recording. macOS asks for it before any
+                app may read the titles of other apps' windows. Tracktiv asks for it when you set
+                up triggers, and uses it only to check window titles against the triggers you
+                wrote. A title stays in memory only while it is needed, and it is never written
+                to disk. You can take the permission back at any time in System Settings, under
+                Privacy &amp; Security.
+            </p>
+            <p>
+                A trigger can also read a title bar as pixels. Tracktiv then takes a picture of
+                the window, keeps only a strip at the top, about the height of a title bar, and
+                reads the text in it. This happens on your Mac, and neither the picture nor the
+                text is kept.
             </p>
 
             <h3>AssetScout</h3>
@@ -179,14 +189,41 @@
                 camera, the location if the file carries one. That reading happens on your Mac
                 and the result stays there.
             </p>
+            <p>
+                The map in the inspector comes from Apple Maps. To draw it, macOS downloads the
+                map of the area shown from Apple, so Apple sees which area was requested.
+                AssetScout does not send the file or its name, and nothing of it reaches us.
+            </p>
 
             <h2>Purchases</h2>
             <p>
-                AssetScout is free. Where an app of ours is sold, it is sold through the Mac App
-                Store, so Apple handles the payment and the receipt. We never see your card details, your address or your Apple Account. What
-                we do see is Apple's own sales reporting: how many copies sold, in which country,
-                on which day. It names nobody.
+                Where an app of ours, or an upgrade inside it, is sold, it is sold through the
+                Mac App Store. Apple handles the payment and the receipt. We never see your card
+                details, your address or your Apple Account. What we do see is Apple's own sales
+                reporting: how many copies sold, in which country, on which day. It names nobody.
             </p>
+
+            <h2>Crash reports and the beta</h2>
+            <p>
+                Apple can pass two more things on to us. Neither of them comes from our apps
+                directly.
+            </p>
+            <ul>
+                <li>
+                    <strong>Crash reports.</strong> If you allowed your Mac to share analytics
+                    with app developers, Apple sends us the report when one of our apps crashes.
+                    A report shows where in our code the crash happened, with your Mac model and
+                    macOS version. It does not name you. You can turn this off in System
+                    Settings, under Privacy &amp; Security, then Analytics &amp; Improvements.
+                </li>
+                <li>
+                    <strong>TestFlight.</strong> If you test a beta, TestFlight shows us the
+                    feedback and screenshots you send, crash reports from the beta, and how often
+                    you installed and opened it. If we invited you by email, it also shows the
+                    name and email address the invitation went to. We use all of this only to fix
+                    the app.
+                </li>
+            </ul>
 
             <h2>This website</h2>
             <p>
@@ -199,9 +236,13 @@
                 <strong>Cloudflare</strong> serves the site, so like any web host it sees your
                 IP address and your browser. <strong>Google Fonts</strong> serves the two
                 typefaces the page uses, so Google's font server also sees your IP address.
-                If you would rather not load the fonts
-                from Google, a content blocker will stop them, and the site still works in your
-                system's own typeface.
+                If you would rather not load the fonts from Google, a content blocker will stop
+                them, and the site still works in your system's own typeface.
+            </p>
+            <p>
+                Both companies are based in the United States, so this may be processed there.
+                Both are certified under the EU–US Data Privacy Framework, which the European
+                Commission accepts as adequate protection for personal data.
             </p>
 
             <h2>Email</h2>
@@ -212,20 +253,66 @@
                 mailing list, and there is none to add you to.
             </p>
 
+            <h2>The legal basis</h2>
+            <p>
+                The GDPR requires every use of personal data to rest on a legal ground. Ours is
+                our legitimate interest (Article 6(1)(f)) in each of these:
+            </p>
+            <ul>
+                <li>delivering this website to you, through Cloudflare and Google Fonts;</li>
+                <li>answering your email, and remembering a bug once it has been reported;</li>
+                <li>fixing the apps with crash reports and beta feedback.</li>
+            </ul>
+            <p>
+                We make no automated decisions about you, and we build no profile of anybody.
+            </p>
+
             <h2>Your rights</h2>
             <p>
-                Under the GDPR you may ask what personal data we hold about you, ask for it to be
-                corrected or erased, and complain to a supervisory authority. In practice the
-                answer to the first question is almost always "your email, if you have written to
-                us". Write to <a href="mailto:contact@devnest.sk">contact@devnest.sk</a> and we
-                will answer.
+                Most people have no personal data with us at all. The little we can hold is:
+            </p>
+            <ul>
+                <li>your email, if you have written to us;</li>
+                <li>your name, email address and feedback, if you tested a beta of ours.</li>
+            </ul>
+            <p>
+                For that data, the GDPR gives you the right to ask us to:
+            </p>
+            <ul>
+                <li>tell you what we hold about you, and give you a copy;</li>
+                <li>correct it, or erase it;</li>
+                <li>limit what we do with it, for example while you dispute it;</li>
+                <li>give it to you in a machine-readable form, so you can take it elsewhere.</li>
+            </ul>
+            <p>
+                <strong>You may also object</strong> to any of the uses above, because each one
+                rests on our legitimate interest. We then stop, unless the law gives us a
+                strong reason to go on.
+            </p>
+            <p>
+                Write to <a href="mailto:contact@devnest.sk">contact@devnest.sk</a> and we will
+                answer within one month. If we hold nothing about you, that will be the answer.
+            </p>
+            <p>
+                If you think we handle your data wrongly, you can complain to the Slovak data
+                protection authority: Úrad na ochranu osobných údajov Slovenskej republiky,
+                Hraničná 12, 820 07 Bratislava,
+                <a href="https://dataprotection.gov.sk/">dataprotection.gov.sk</a>. You can also
+                complain in the EU country where you live.
+            </p>
+
+            <h2>Who we are</h2>
+            <p>
+                The controller of the data described here is DevNest s. r. o., Spojovacia
+                1007/5, 930 05 Gabčíkovo, Slovakia, IČO 55 697 020. Write to
+                <a href="mailto:contact@devnest.sk">contact@devnest.sk</a> with any question
+                about privacy. The full company details are on the
+                <a href="/company/#imprint">company page</a>.
             </p>
 
             <h2>Changes</h2>
             <p>
-                If this policy changes, the date at the top changes with it. The controller is
-                DevNest s.r.o.; the company details are on the
-                <a href="/company/#imprint">company page</a>.
+                If this policy changes, the date at the top changes with it.
             </p>
         </div>
     </div>
