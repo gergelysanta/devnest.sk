@@ -77,13 +77,13 @@
 :root[data-appearance="dark"] {
     color-scheme: dark;
 
-    --bg:          #0c0e12;
-    --bg-2:        #111419;
-    --surface:     #161a21;
-    --surface-2:   #1c212a;
+    --bg:          #21242a;
+    --bg-2:        #262a32;
+    --surface:     #2c303a;
+    --surface-2:   #333844;
     --line:        rgba(255, 255, 255, .09);
     --line-strong: rgba(255, 255, 255, .17);
-    --scrim:       rgba(12, 14, 18, .74);
+    --scrim:       rgba(33, 36, 42, .74);
 
     --ink:   #eef1f6;
     --ink-2: #c2cad6;
@@ -111,13 +111,13 @@
     :root:not([data-appearance="light"]) {
         color-scheme: dark;
 
-        --bg:          #0c0e12;
-        --bg-2:        #111419;
-        --surface:     #161a21;
-        --surface-2:   #1c212a;
+        --bg:          #21242a;
+        --bg-2:        #262a32;
+        --surface:     #2c303a;
+        --surface-2:   #333844;
         --line:        rgba(255, 255, 255, .09);
         --line-strong: rgba(255, 255, 255, .17);
-        --scrim:       rgba(12, 14, 18, .74);
+        --scrim:       rgba(33, 36, 42, .74);
 
         --ink:   #eef1f6;
         --ink-2: #c2cad6;
