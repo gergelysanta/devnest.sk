@@ -151,23 +151,20 @@ swiftc -O tools/og.swift -o /tmp/og && /tmp/og assets/img/brand/og.png
 
 ## Before it goes live
 
-Five things are still open:
+Four things are still open:
 
 1. **The TestFlight link.** The beta buttons on the Tracktiv page point at
    `mailto:support@devnest.sk`. Swap in the public TestFlight URL — it appears
    twice, in the hero and in `#beta`.
-2. **The imprint.** `company/index.html#imprint` has placeholders for the
-   registered seat, IČO, DIČ and the commercial register entry. Slovak law
-   (Obchodný zákonník § 3a) wants those on the company site.
-3. **The screenshots contain real data.** Tracktiv's show tracked time, with
+2. **The screenshots contain real data.** Tracktiv's show tracked time, with
    real client and project names in it. AssetScout's inspector figure prints the
    file path of the selected picture, and that path is a folder inside the
    developer's home directory. Check both sets before publishing, and retake
    anything that should not be public.
-4. **The App Store link.** Both buttons on the AssetScout page point at
+3. **The App Store link.** Both buttons on the AssetScout page point at
    `https://apps.apple.com/app/assetscout`, which is a guess. Swap in the real
    product URL — it is marked `TODO` in the HTML, and it appears twice.
-5. **Four figures the manual has no picture for**: the scan control while a scan
+4. **Four figures the manual has no picture for**: the scan control while a scan
    runs, the two settings panes, and the *Show Skipped Files* sheet. Each needs a
    light and a dark capture of the same window.
 

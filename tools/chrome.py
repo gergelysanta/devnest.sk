@@ -166,7 +166,7 @@ PAGES = {
         "url": "/company/",
         "title": "Company · DevNest s.r.o.",
         "description": "DevNest s.r.o. is a software company in Slovakia building native "
-                       "macOS software. Who we are, how we work, and the imprint.",
+                       "macOS software. Who we are and how we work.",
     },
     "support/index.html": {
         "url": "/support/",
