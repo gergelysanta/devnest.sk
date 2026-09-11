@@ -47,7 +47,7 @@ APPS = [
         "url": "/apps/tracktiv/",
         "icon": "/assets/img/apps/tracktiv/icon-256.png",
         "state": "beta",
-        "state_label": "In beta",
+        "state_label": "Beta · TestFlight",
         "summary": "Writes your working day down for you.",
     },
     {
@@ -56,7 +56,7 @@ APPS = [
         "url": "/apps/assetscout/",
         "icon": "/assets/img/apps/assetscout/icon.svg",
         "state": "shipping",
-        "state_label": "On the Mac App Store",
+        "state_label": "App Store",
         "summary": "Finds the file when you know the date, not the folder.",
     },
 ]
