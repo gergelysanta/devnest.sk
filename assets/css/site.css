@@ -1258,11 +1258,18 @@ a.card h4 { transition: color .2s var(--ease); }
     font-size: .91rem;
 }
 .footer__grid {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 2.2rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
 }
-.footer__brand .brand { margin-bottom: .8rem; }
+.footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7rem;
+    margin-right: 7rem;
+}
+.footer__brand .brand { margin-bottom: .4rem; }
 .footer__line { max-width: 24ch; font-size: .87rem; color: var(--muted); }
 .footer h5 {
     margin: 0 0 .8rem;

@@ -342,28 +342,22 @@ FOOTER = """<footer class="footer">
                 <p class="footer__line">{tagline}</p>
             </div>
 
-            <div>
-                <h5>Apps</h5>
-                <ul>
+            <div class="footer__links">
+                <div>
+                    <h5>Apps</h5>
+                    <ul>
 {app_links}
-                </ul>
-            </div>
+                    </ul>
+                </div>
 
-            <div>
-                <h5>Company</h5>
-                <ul>
-                    <li><a href="/company/">About DevNest</a></li>
-                    <li><a href="/company/#imprint">Imprint</a></li>
-                    <li><a href="/support/">Support</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h5>Elsewhere</h5>
-                <ul>
-                    <li><a href="mailto:{email}">{email}</a></li>
-                    <li><a href="/privacy/">Privacy policy</a></li>
-                </ul>
+                <div>
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="/company/">About DevNest</a></li>
+                        <li><a href="/support/">Support</a></li>
+                        <li><a href="/privacy/">Privacy policy</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -409,7 +403,7 @@ def build_nav(meta):
 
 def build_footer(meta):
     links = "\n".join(
-        '                    <li><a href="%s">%s</a></li>' % (a["url"], a["name"]) for a in APPS
+        '                        <li><a href="%s">%s</a></li>' % (a["url"], a["name"]) for a in APPS
     )
     return FOOTER.format(logo=LOGO, tagline=TAGLINE, app_links=links,
                          email=EMAIL, company=COMPANY)
