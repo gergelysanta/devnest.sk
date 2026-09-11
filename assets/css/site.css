@@ -239,7 +239,13 @@ code { font-family: var(--font-mono); font-size: .92em; }
 
 .lead {
     max-width: 58ch;
-    font-size: clamp(1.03rem, 1.3vw, 1.2rem);
+    /* .lead almost always follows an .h-section heading. The vw share here is
+       .h-section's own share (3.3vw) times the ratio of the two max sizes
+       (1.2rem / 2.7rem), so both fonts stop growing at the same viewport
+       width, about 1309px (2.7rem*16 / 0.033). At 1.3vw they did not agree:
+       the lead stopped growing at 1477px, well above where the heading even
+       starts changing, so the lead moved while the heading still sat still. */
+    font-size: clamp(1.03rem, 1.4667vw, 1.2rem);
     line-height: 1.55;
     color: var(--ink-2);
 }
@@ -595,7 +601,13 @@ html:not(.js) .sheet[hidden] { display: none; }
 .hero__lead {
     max-width: 58ch;
     margin-inline: auto;
-    font-size: clamp(1.06rem, 1.4vw, 1.28rem);
+    /* This clamp's vw share is picked so its font stops growing at the same
+       viewport width where the h1 above does, about 1200px (h1 is
+       clamp(2.45rem, 5.6vw, 4.2rem), which reaches 4.2rem at 4.2*16/0.056).
+       At 1.4vw the two used to fall out of step: the lead stopped shrinking
+       at 1211px, and the h1 did not start until 1200px, so between those two
+       widths the lead sat at its floor while the h1 had not yet moved. */
+    font-size: clamp(1.06rem, 1.7vw, 1.28rem);
     line-height: 1.55;
     color: var(--ink-2);
 }
@@ -919,7 +931,11 @@ a.card h4 { transition: color .2s var(--ease); }
 /* …but a button inside prose is still a button, and keeps its own colours. */
 .prose a.btn--primary { color: var(--accent-ink); }
 .prose a.btn--ghost   { color: var(--ink); }
-.prose > .lead { margin-bottom: 1.6rem; }
+/* Here .lead follows the plain .prose h1 instead of .h-section, and that
+   heading has its own, narrower clamp. So this repeats the same match as
+   above, against .prose h1's numbers instead: 4vw * (1.2rem / 2.9rem), which
+   stops both fonts growing together at about 1160px (2.9rem*16 / 0.04). */
+.prose > .lead { margin-bottom: 1.6rem; font-size: clamp(1.03rem, 1.6552vw, 1.2rem); }
 .prose strong { color: var(--ink); }
 
 /* --------------------------------------------------------------------------
