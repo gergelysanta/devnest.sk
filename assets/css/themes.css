@@ -117,6 +117,7 @@ body[data-app="assetscout"] {
     aspect-ratio: 16 / 10;
     perspective: 1400px;
     text-align: left;   /* the hero centres its text; the windows must not */
+    container: stage / inline-size;
 }
 
 .stage__win {
@@ -133,8 +134,26 @@ body[data-app="assetscout"] {
 .stage__win { animation: float 9s ease-in-out infinite; }
 
 .stage__win--back  { left: 0;    top: 2%;  width: 58%; --depth: .5; animation-delay: -1.5s; }
-.stage__win--mid   { right: 0;   top: 16%; width: 52%; --depth: 1.1; animation-delay: -4.5s; }
+.stage__win--mid   { right: 0;   top: 10%; width: 52%; --depth: 1.1; animation-delay: -4.5s; }
 .stage__win--front { left: 12%;  bottom: 0; width: 62%; --depth: 1.7; z-index: 2; }
+
+/* The positions above are set for a phone or a tablet. The stage grows with the
+   page, but the text in the windows does not, so on a wide stage every window
+   is shorter compared with the stage. With the same positions, the timer then
+   covered 155px of the code window, and a 24px gap opened between the timer
+   and the pictures (measured on the full 940px stage).
+
+   On a wide stage two things change, and the timer keeps its place:
+   - The code window is narrower. Its right part was empty, and now the timer
+     only touches its corner instead of covering it.
+   - The picture grid is taller (see .thumbs), so the picture window reaches
+     up to the code window and covers about 20px of the timer's bottom edge.
+     That is the empty strip under "Today". The timer must not sit lower: the
+     two windows float in opposite phase, 9px each way, and a lower timer
+     would let the picture window cover the "Today" line. */
+@container stage (min-width: 900px) {
+    .stage__win--back { width: 50%; }
+}
 
 @keyframes float {
     0%, 100% { translate: 0 0; }
@@ -161,22 +180,193 @@ body[data-app="assetscout"] {
     color: var(--muted);
 }
 
-/* Skeleton rows that wash in, one after another */
-.rows { display: grid; gap: .55rem; padding: .95rem; }
-.rows i {
-    height: 9px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, var(--surface-2) 0%, var(--line) 40%, var(--surface-2) 80%);
-    background-size: 300% 100%;
-    animation: wash 3.2s linear infinite;
-    animation-delay: calc(var(--i, 0) * .18s);
+/* The windows are containers, so a window can change its own layout when the
+   stage gets narrow. The page width alone does not say how wide a window is. */
+.stage__win { container: win / inline-size; }
+
+/* The timer window: a clock that runs, today's blocks, and the week as bars.
+
+   The clock counts in CSS alone. --tick-m and --tick-s are registered as
+   integers, so an animation steps them 0, 1, 2 … instead of jumping from the
+   first value to the last one halfway. A counter then prints each one with a
+   leading zero. The negative delays start the clock at 01:42:18, not at
+   01:00:00: -18s for the seconds, and -2538s (42 × 60 + 18) for the
+   minutes, so both roll over at the same moment. With reduced motion the
+   animation ends at once, and the clock shows the declared values: the same
+   01:42:18, standing still. */
+@property --tick-m { syntax: "<integer>"; inherits: false; initial-value: 0; }
+@property --tick-s { syntax: "<integer>"; inherits: false; initial-value: 0; }
+
+.timer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 1.2rem;
+    align-items: start;
+    padding: .9rem 1rem 1rem;
 }
-.rows i:nth-child(3n)   { width: 62%; }
-.rows i:nth-child(3n+1) { width: 88%; }
-.rows i:nth-child(3n+2) { width: 74%; }
-@keyframes wash {
-    0%   { background-position: 120% 0; }
-    100% { background-position: -60% 0; }
+.timer__task {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    margin: 0;
+    font-size: .74rem;
+    color: var(--ink-2);
+}
+.timer__task i {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--good);
+    animation: blink 2s ease-in-out infinite;
+}
+.timer__clock {
+    --tick-m: 42;
+    --tick-s: 18;
+    counter-reset: m var(--tick-m) s var(--tick-s);
+    margin: .2rem 0 .75rem;
+    font-family: var(--font-mono);
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    animation: tick-s 60s steps(60, end) -18s infinite,
+               tick-m 3600s steps(60, end) -2538s infinite;
+}
+.timer__clock::after { content: "01:" counter(m, decimal-leading-zero) ":" counter(s, decimal-leading-zero); }
+@keyframes tick-s { from { --tick-s: 0; } to { --tick-s: 60; } }
+@keyframes tick-m { from { --tick-m: 0; } to { --tick-m: 60; } }
+@keyframes blink  { 50% { opacity: .35; } }
+
+/* Today as a strip of blocks. The empty part at the end is the rest of the day. */
+.timer__day {
+    display: flex;
+    gap: 2px;
+    height: 7px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
+}
+.timer__day i { width: var(--w); background: var(--accent); }
+.timer__day i:nth-child(2n) { background: var(--accent-2); }
+.timer__day i:nth-child(4)  { background: var(--line-strong); }
+.timer__sum {
+    display: flex;
+    justify-content: space-between;
+    gap: .5rem;
+    margin: .5rem 0 0;
+    font-size: .68rem;
+    color: var(--muted);
+}
+.timer__sum b { font-family: var(--font-mono); font-weight: 500; color: var(--ink-2); }
+.timer__week .timer__sum { margin: 0 0 .35rem; }
+
+/* In a narrow window the week does not fit. Beside the clock it is squeezed,
+   and the front window covers it. Under the clock it makes the window taller
+   than the stage. So it is left out. The 420px limit was chosen by looking at
+   the stage: at a 768px wide page the timer window is about 360px wide, and the
+   week was already hidden. */
+@container win (max-width: 420px) {
+    .timer { grid-template-columns: minmax(0, 1fr); }
+    .timer__week { display: none; }
+}
+
+/* The thumbnail window: a grid of pictures under a month heading, scrolled a
+   little down and back up again, the way someone looks for one picture.
+
+   The heading stays in place and the grid slides under it. The pictures are
+   drawn with gradients, so no image has to load for the hero. They keep the
+   same colours in the dark appearance, the same way real photographs do. */
+.thumbs {
+    position: relative;
+    aspect-ratio: 16 / 8;
+    overflow: hidden;
+}
+/* On a wide stage the grid is taller. See the note under the window positions. */
+@container stage (min-width: 900px) {
+    .thumbs { aspect-ratio: 16 / 9; }
+}
+.thumbs__head {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: .45rem .8rem;
+    font-size: .7rem;
+    color: var(--ink-2);
+    background: color-mix(in srgb, var(--surface) 76%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+}
+.thumbs__head span { display: flex; align-items: center; gap: .35rem; }
+.thumbs__head span + span { color: var(--muted); font-variant-numeric: tabular-nums; }
+.thumbs__head svg {
+    width: 10px; height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.thumbs__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .5rem;
+    padding: 2.35rem .6rem .6rem;
+    animation: browse 12s infinite;
+}
+.thumbs__grid i {
+    display: block;
+    padding: 3px 3px 0;
+    border-radius: 6px;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
+}
+.thumbs__grid i::before {
+    content: "";
+    display: block;
+    aspect-ratio: 16 / 10;
+    border-radius: 3px;
+    background: var(--photo, var(--line));
+}
+/* The caption under each picture, where the app prints the date */
+.thumbs__grid i::after {
+    content: "";
+    display: block;
+    width: 62%;
+    height: 4px;
+    margin: 7px auto;
+    border-radius: 2px;
+    background: var(--line-strong);
+}
+.thumbs__grid .is-selected { background: var(--accent); box-shadow: none; }
+.thumbs__grid .is-selected::after { background: color-mix(in srgb, var(--accent-ink) 70%, transparent); }
+
+/* Ten pictures, repeated. With four columns and ten pictures, the same picture
+   never lands straight under itself in the next rows. */
+.thumbs__grid i:nth-child(10n+1)  { --photo: radial-gradient(circle at 72% 44%, #ffe2b0 5%, transparent 6%), linear-gradient(#f2b27d, #d98a8a 52%, #3f5a82 52%, #2b3f5f); }
+.thumbs__grid i:nth-child(10n+2)  { --photo: radial-gradient(120% 90% at 32% 112%, #4a5a4c 50%, transparent 51%), radial-gradient(90% 70% at 85% 110%, #6b7d69 50%, transparent 51%), linear-gradient(#b8cbe0, #e3ebf2); }
+.thumbs__grid i:nth-child(10n+3)  { --photo: radial-gradient(150% 70% at 70% 112%, #c9864f 50%, transparent 51%), linear-gradient(#9fc3e2, #e2c7a5); }
+.thumbs__grid i:nth-child(10n+4)  { --photo: radial-gradient(40% 30% at 30% 20%, rgba(255, 255, 255, .35), transparent), linear-gradient(#5fa8c9, #1f5f86 60%, #173f5c); }
+.thumbs__grid i:nth-child(10n+5)  { --photo: linear-gradient(to top, #2a2d3a 28%, transparent 28%), radial-gradient(circle at 60% 66%, #ffd28a 7%, transparent 8%), linear-gradient(#6d7fa6, #e9a877 70%); }
+.thumbs__grid i:nth-child(10n+6)  { --photo: radial-gradient(90% 60% at 22% 104%, #d5dee7 60%, transparent 61%), radial-gradient(90% 70% at 88% 108%, #8f9fae 55%, transparent 56%), linear-gradient(#eef3f7, #c5d3df); }
+.thumbs__grid i:nth-child(10n+7)  { --photo: radial-gradient(70% 40% at 50% 55%, #4f7a4c 50%, transparent 51%), linear-gradient(#a9c7a0, #6d946a 55%, #3e5f6f 55%, #2c4756); }
+.thumbs__grid i:nth-child(10n+8)  { --photo: radial-gradient(160% 95% at 50% 135%, #2f6fb5 55%, #8fc2f0 57.5%, #0b1020 60%); }
+.thumbs__grid i:nth-child(10n+9)  { --photo: radial-gradient(22% 12% at 38% 66%, #34384a 60%, transparent 62%), linear-gradient(#e7a7b5, #c9a7d6 58%, #7a8bb5 58%, #4f5f8a); }
+.thumbs__grid i:nth-child(10n+10) { --photo: radial-gradient(80% 30% at 40% 70%, #f4f6f8 50%, transparent 70%), linear-gradient(#9bb3c9, #e2e8ec 62%, #c9d3db); }
+
+/* One scroll takes 1.8 s and eases out, like a flick on a trackpad. The
+   distance is a share of the grid's own height: the grid has five rows, so
+   22% is a little more than one row. */
+@keyframes browse {
+    0%, 16%  { transform: translateY(0);    animation-timing-function: cubic-bezier(.3, .6, .2, 1); }
+    31%, 58% { transform: translateY(-22%); animation-timing-function: cubic-bezier(.3, .6, .2, 1); }
+    73%, 100% { transform: translateY(0); }
 }
 
 /* The code window types itself out, one line at a time */
@@ -205,35 +395,66 @@ body[data-app="assetscout"] {
     92%, 100% { width: 0; }
 }
 
-/* The chart draws its own line, then fills underneath it */
-.chart { display: block; width: 100%; height: auto; }
-.chart__line {
-    fill: none;
-    stroke: var(--accent);
-    stroke-width: 2.4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 460;
-    stroke-dashoffset: 460;
-    animation: draw 3.4s var(--ease) forwards;
-    animation-delay: .35s;
+/* The week as one bar per day, Monday to Sunday. The numbers agree with the
+   text around them. Today is Friday, and its bar is the "Today" value, 6h 12m.
+   The five bars add up to the week total: 6h 40m + 7h 05m + 5h 50m + 5h 37m +
+   6h 12m = 31h 24m. A full bar is 8 hours, a chosen scale, so 6h 40m is 83%.
+   Saturday and Sunday have not happened yet, so they show only the empty
+   track. The bars grow in one after another when the page opens.
+
+   After that, every 8 seconds a small wave runs across the bars from Monday
+   to Friday. Each bar dips a little, springs up past its value, and settles
+   back. The wave writes `scale`, and the growth writes `transform`, so the
+   two animations never fight over one property. The tallest bar is 89%, and
+   the wave stretches it by 7% at most, to about 95%, so no bar leaves its
+   track. */
+.bars {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: .45rem;
+    height: 5.6rem;
 }
-.chart__fill {
-    fill: var(--accent);
-    opacity: 0;
-    animation: fade-in 1.6s var(--ease) forwards;
-    animation-delay: 2.2s;
+.bars span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .3rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    color: var(--muted);
 }
-.chart__grid { stroke: var(--line); stroke-width: 1; }
-.chart__dot  {
-    fill: var(--accent);
-    opacity: 0;
-    animation: pop .5s var(--ease) forwards;
-    animation-delay: calc(1.2s + var(--i, 0) * .35s);
+.bars i {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    border-radius: 4px;
+    background: var(--surface-2);
 }
-@keyframes draw    { to { stroke-dashoffset: 0; } }
-@keyframes fade-in { to { opacity: .14; } }
-@keyframes pop     { from { transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+.bars i::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--h, 0%);
+    border-radius: inherit;
+    background: color-mix(in srgb, var(--accent) 38%, var(--surface));
+    transform-origin: bottom;
+    /* The -4s delay moves the first wave forward, so it comes 2.4s after the
+       page opens instead of 6.4s. By then every bar has finished growing. */
+    animation: grow 1s var(--ease) both,
+               nudge 8s ease-in-out infinite;
+    animation-delay: calc(.4s + var(--i, 0) * .09s),
+                     calc(var(--i, 0) * .1s - 4s);
+}
+.bars .is-today { color: var(--ink); font-weight: 500; }
+.bars .is-today i::before { background: var(--accent); }
+@keyframes grow { from { transform: scaleY(0); } }
+/* The bar rests for the first 80% of the cycle. The wave takes the last 1.6s. */
+@keyframes nudge {
+    0%, 80%, 100% { scale: 1 1; }
+    84%           { scale: 1 .93; }
+    91%           { scale: 1 1.07; }
+    96%           { scale: 1 .985; }
+}
 
 /* --------------------------------------------------------------------------
    2.2 App cards on the home page

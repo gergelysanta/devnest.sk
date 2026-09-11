@@ -181,9 +181,9 @@
             <div class="stage" data-stage aria-hidden="true">
 
                 <div class="stage__win stage__win--back">
-                    <div class="winbar"><i></i><i></i><i></i><span>DayRing.swift</span></div>
+                    <div class="winbar"><i></i><i></i><i></i><span>RingView.swift</span></div>
                     <div class="code">
-<span style="--i: 0">struct <b>DayRing</b>: View {</span>
+<span style="--i: 0">struct <b>RingView</b>: View {</span>
 <span style="--i: 1">    var seconds: Int</span>
 <span style="--i: 2">    var body: some View {</span>
 <span style="--i: 3">        Circle()</span>
@@ -194,33 +194,46 @@
                 </div>
 
                 <div class="stage__win stage__win--mid">
-                    <div class="winbar"><i></i><i></i><i></i><span>Library</span></div>
-                    <div class="rows">
-                        <i style="--i: 0"></i><i style="--i: 1"></i><i style="--i: 2"></i>
-                        <i style="--i: 3"></i><i style="--i: 4"></i><i style="--i: 5"></i>
-                        <i style="--i: 6"></i>
+                    <div class="winbar"><i></i><i></i><i></i><span>Timer</span></div>
+                    <div class="timer">
+                        <div class="timer__now">
+                            <p class="timer__task"><i></i>Deep work</p>
+                            <p class="timer__clock"></p>
+                            <div class="timer__day">
+                                <i style="--w: 22%"></i><i style="--w: 9%"></i><i style="--w: 31%"></i>
+                                <i style="--w: 6%"></i><i style="--w: 14%"></i>
+                            </div>
+                            <p class="timer__sum">Today <b>6h 12m</b></p>
+                        </div>
+                        <div class="timer__week">
+                            <p class="timer__sum">This week <b>31h 24m</b></p>
+                            <div class="bars">
+                                <span style="--h: 83%; --i: 0"><i></i>M</span>
+                                <span style="--h: 89%; --i: 1"><i></i>T</span>
+                                <span style="--h: 73%; --i: 2"><i></i>W</span>
+                                <span style="--h: 70%; --i: 3"><i></i>T</span>
+                                <span class="is-today" style="--h: 78%; --i: 4"><i></i>F</span>
+                                <span><i></i>S</span>
+                                <span><i></i>S</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="stage__win stage__win--front">
-                    <div class="winbar"><i></i><i></i><i></i><span>This week</span></div>
-                    <div style="padding: .9rem 1rem 1.1rem">
-                        <svg class="chart" viewBox="0 0 320 150">
-                            <g class="chart__grid">
-                                <path d="M12 138h288M12 100h288M12 62h288M12 24h288"></path>
-                            </g>
-                            <path class="chart__fill" d="M12 118 60 96 108 104 156 66 204 78 252 40 300 22 300 138 12 138Z"></path>
-                            <path class="chart__line" d="M12 118 60 96 108 104 156 66 204 78 252 40 300 22"></path>
-                            <g>
-                                <circle class="chart__dot" style="--i: 0" cx="12"  cy="118" r="3.5"></circle>
-                                <circle class="chart__dot" style="--i: 1" cx="60"  cy="96"  r="3.5"></circle>
-                                <circle class="chart__dot" style="--i: 2" cx="108" cy="104" r="3.5"></circle>
-                                <circle class="chart__dot" style="--i: 3" cx="156" cy="66"  r="3.5"></circle>
-                                <circle class="chart__dot" style="--i: 4" cx="204" cy="78"  r="3.5"></circle>
-                                <circle class="chart__dot" style="--i: 5" cx="252" cy="40"  r="3.5"></circle>
-                                <circle class="chart__dot" style="--i: 6" cx="300" cy="22"  r="3.5"></circle>
-                            </g>
-                        </svg>
+                    <div class="winbar"><i></i><i></i><i></i><span>Pictures</span></div>
+                    <div class="thumbs">
+                        <p class="thumbs__head">
+                            <span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5l3-3"></path></svg>2026 August</span>
+                            <span>1 618 items</span>
+                        </p>
+                        <div class="thumbs__grid">
+                            <i></i><i></i><i></i><i></i>
+                            <i></i><i class="is-selected"></i><i></i><i></i>
+                            <i></i><i></i><i></i><i></i>
+                            <i></i><i></i><i></i><i></i>
+                            <i></i><i></i><i></i><i></i>
+                        </div>
                     </div>
                 </div>
 
