@@ -36,7 +36,6 @@ COMPANY = "DevNest s.r.o."
 TAGLINE = "Mac software from Slovakia"
 EMAIL = "contact@devnest.sk"
 ORIGIN = "https://devnest.sk"
-ANALYTICS = "G-8Y0GKK6W0T"
 
 # The apps, in the order they appear in the header menu and on the home page.
 # `state` picks the colour of the dot beside the name: green shipping, amber
@@ -244,14 +243,6 @@ HEAD = """<meta charset="utf-8">
     }} catch (e) {{ /* private browsing: fall back to the system setting */ }}
     document.documentElement.classList.add("js");
 }})();
-</script>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id={analytics}"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){{dataLayer.push(arguments);}}
-    gtag('js', new Date());
-    gtag('config', '{analytics}');
 </script>"""
 
 # The logo carries the company name itself, so nothing else needs to spell it
@@ -376,7 +367,6 @@ def build_head(meta):
         origin=ORIGIN,
         url=meta["url"],
         site=SITE,
-        analytics=ANALYTICS,
         robots='\n<meta name="robots" content="noindex">' if meta.get("noindex") else "",
     )
 
