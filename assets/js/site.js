@@ -353,6 +353,58 @@
     }
 
     /* ----------------------------------------------------------------------
+       Carrying a gesture from a side column into the page
+
+       A manual page has one scrollbar, the window's, and both side columns
+       are stuck to the top of it. A column taller than the window also
+       scrolls inside itself, and that is where the reading breaks: a browser
+       keeps a wheel or trackpad gesture on the element it started on, so at
+       the end of the list the page under the pointer stands still until the
+       reader lifts the finger and starts again. Scrolling back up over a
+       column whose own list is already at the top does nothing at all.
+
+       So every turn of the wheel is split: the column takes as much of it as
+       its own list can use, and whatever is left over moves the page. In both
+       directions, and within a single turn — one long swipe that empties the
+       list keeps going down the page with the same push.
+       ---------------------------------------------------------------------- */
+
+    function setupSideScroll() {
+        each(document.querySelectorAll("[data-docside], [data-docmap]"), function (column) {
+            column.addEventListener("wheel", function (event) {
+                if (event.ctrlKey) return;          /* a pinch, not a scroll */
+
+                var room = column.scrollHeight - column.clientHeight;
+                if (room < 1) return;               /* the column does not scroll */
+
+                /* A mouse may report lines instead of pixels; 16 is one line
+                   at the root font size this site sets. */
+                var delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+                if (!delta) return;
+
+                var at = column.scrollTop;
+                var mine = Math.max(-at, Math.min(room - at, delta));
+                var rest = delta - mine;
+                if (!rest) return;                  /* the column uses all of it */
+
+                /* Past here the column's own scrolling is ours to do, because
+                   the event has to be stopped to keep the browser from moving
+                   two things at once. */
+                event.preventDefault();
+                column.scrollTop = at + mine;
+
+                /* In-page links scroll smoothly (see site.css). A gesture
+                   must not: it has to land where the hand put it. */
+                var root = document.documentElement;
+                var behaviour = root.style.scrollBehavior;
+                root.style.scrollBehavior = "auto";
+                window.scrollBy(0, rest);
+                root.style.scrollBehavior = behaviour;
+            }, { passive: false });
+        });
+    }
+
+    /* ----------------------------------------------------------------------
        Scroll reveals
 
        One trigger drives three things: the fade-up of a block, the fill of a
@@ -526,6 +578,7 @@
         setupSheet();
         setupDocnav();
         setupDocmap();
+        setupSideScroll();
         setupReveal();
         setupCounters();
         setupStage();

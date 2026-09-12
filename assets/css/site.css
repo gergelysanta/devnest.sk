@@ -1061,9 +1061,11 @@ a.card h4 { transition: color .2s var(--ease); }
    12b. The manual
 
    Three columns: the book's pages down the left, one page in the middle, and
-   the headings of that page down the right. Both side columns are sticky and
-   scroll on their own. Below 1200px the right one goes; below 1000px the left
-   one folds behind a button and the page reads as one column.
+   the headings of that page down the right. The page has one scrollbar, the
+   window's; both side columns are stuck to the top of it and only scroll on
+   their own when they are taller than the window. Below 1200px the right one
+   goes; below 1000px the left one folds behind a button and the page reads as
+   one column.
 
    The left column is generated, like the header — see tools/chrome.py. The
    right one is built from the page's own <h2>s by site.js, so it can never
@@ -1084,13 +1086,17 @@ a.card h4 { transition: color .2s var(--ease); }
     position: relative;
     font-size: .91rem;
 }
+/* A list longer than the window scrolls inside the column. Its scrolling is
+   deliberately not contained: at either end of the list the gesture has to
+   carry on into the page, or the reader is stuck in the column. The browser
+   only hands a gesture on after a pause, so site.js passes on what the column
+   could not use itself. */
 @media (min-width: 1000px) {
     .docside {
         position: sticky;
         top: calc(var(--nav-h) + 1.4rem);
         max-height: calc(100dvh - var(--nav-h) - 2.8rem);
         overflow-y: auto;
-        overscroll-behavior: contain;
         scrollbar-width: thin;
     }
 }
