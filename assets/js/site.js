@@ -157,13 +157,13 @@
     }
 
     /* ----------------------------------------------------------------------
-       Header: the page's own buttons, once they have scrolled away
+       Header: the page's own store badge, once it has scrolled away
 
-       A product page repeats its store badge and its second button in the
-       header (NAV_CTA in tools/chrome.py). The copy shows only when no store
-       badge of the page itself is on screen, and the first one is above the
-       window. Apple asks for one badge per layout, so the header copy steps
-       aside again when the closing section's badge comes into view.
+       A product page repeats its store badge in the header (NAV_CTA in
+       tools/chrome.py). The copy shows only when no store badge of the page
+       itself is on screen, and the first one is above the window. Apple asks
+       for one badge per layout, so the header copy steps aside again when
+       the closing section's badge comes into view.
        ---------------------------------------------------------------------- */
 
     function setupNavCta() {

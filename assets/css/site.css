@@ -499,39 +499,30 @@ html:not(.js) .menu__panel[hidden] { display: none; }
 :root[data-appearance="dark"]  .appearance .icon-moon   { display: block; }
 :root:not([data-appearance]) .appearance .icon-system   { display: block; }
 
-/* A product page's own buttons, repeated in the header once they have
-   scrolled away. site.js adds .has-cta to the header, and the buttons fade
-   in and out. Only the opacity changes: Apple asks that the badge itself is
-   not animated, so it never moves.
-   The hidden buttons keep their place, so nothing else in the header moves
-   when they come and go. Both auto margins centre them in the free space
-   between the logo and the links. On the desktop layout they are centred
+/* A product page's own store badge, repeated in the header once the page's
+   own has scrolled away. site.js adds .has-cta to the header, and the badge
+   fades in and out. Only the opacity changes: Apple asks that the badge
+   itself is not animated, so it never moves.
+   The hidden badge keeps its place, so nothing else in the header moves
+   when it comes and goes. Both auto margins centre it in the free space
+   between the logo and the links. On the desktop layout it is centred
    on the header itself instead (see the media queries below).
    40px is Apple's smallest allowed badge height on screen. It leaves 9px
    above and below in the 58px header. At 40px the badge corner reads as
-   6.8px (see .store-badge), so the button beside it gets 7px. The .7rem gap
-   keeps Apple's clear space of a quarter of the badge height (10px). */
+   6.8px (see .store-badge). */
 .nav__cta {
     display: flex;
     align-items: center;
-    gap: .7rem;
     flex: none;
     margin-inline: auto;
     opacity: 0;
-    visibility: hidden;     /* keeps the hidden links out of the tab order */
+    visibility: hidden;     /* keeps the hidden link out of the tab order */
     transition: opacity .25s var(--ease), visibility .25s;
 }
 .nav.has-cta .nav__cta { opacity: 1; visibility: visible; }
 .nav__cta + .nav__links { margin-left: 0; }
 .nav__cta .store-badge { border-radius: 7px; }
 .nav__cta .store-badge img { height: 40px; }
-.nav__cta .btn {
-    height: 40px;
-    padding-block: 0;
-    padding-inline: .95rem;
-    border-radius: 7px;
-    font-size: .88rem;
-}
 
 .burger { display: none; position: relative; }
 .burger span {
@@ -587,8 +578,8 @@ html:not(.js) .sheet[hidden] { display: none; }
     .burger { display: grid; }
 }
 
-/* On the desktop layout the page's buttons are centred on the header, in
-   line with the centred hero below it. They leave the row, so the links go
+/* On the desktop layout the page's badge is centred on the header, in
+   line with the centred hero below it. It leaves the row, so the links go
    back to their own auto margin. */
 @media (min-width: 861px) {
     .nav__inner { position: relative; }
@@ -602,14 +593,9 @@ html:not(.js) .sheet[hidden] { display: none; }
     .nav__cta + .nav__links { margin-left: auto; }
 }
 
-/* The header has room for both of the page's buttons only at some widths.
-   Measured on the desktop layout: centred, both buttons leave 27px before
-   the links at 1040px, but only 7px at 1000px. On the narrow layout the
-   whole row needs 648px, and the badge alone 495px. Below that nothing is
-   repeated. */
-@media (min-width: 861px) and (max-width: 1039px), (max-width: 719px) {
-    .nav__cta .btn { display: none; }
-}
+/* Below 560px nothing is repeated. Measured on the narrow layout, the
+   header needs 495px for the badge to fit beside the logo, the appearance
+   switch and the burger. */
 @media (max-width: 559px) {
     .nav__cta { display: none; }
     .nav__cta ~ .appearance { margin-left: auto; }
@@ -1416,6 +1402,10 @@ a.card h4 { transition: color .2s var(--ease); }
 .footer ul { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
 .footer a { color: var(--ink-2); text-decoration: none; }
 .footer a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* The rule on the left ties the manual back to the app it belongs to. Scoped
+   under .footer so its specificity beats the ".footer ul" reset above. */
+.footer .footer__submenu { margin-top: .5rem; padding-left: .8rem; border-left: 1px solid var(--line); }
 .footer__bottom {
     display: flex;
     flex-wrap: wrap;

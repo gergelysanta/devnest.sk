@@ -6,7 +6,7 @@ Static site, no build step. Plain HTML, `assets/css/site.css` +
 **Never hand-edit anything between `<!-- chrome:… -->` markers** (in HTML) or
 `/* chrome:… */` markers (in CSS). `tools/chrome.py` writes them: `<head>`, the
 header, the footer, each page's layout, the manual's sidebar, title and
-previous/next links, the components (`store-badge`, `app-cards`, `doc-cards`),
+previous/next links, the components (`store-badge`, `app-cards`),
 the system-dark CSS copies and `sitemap.xml`. Change the templates or the data
 (`APPS`, `COMPANY_PAGES`, `MANUALS`, `PAGES`) in that file, then run
 `python3 tools/chrome.py`. `--check` must pass before a commit.

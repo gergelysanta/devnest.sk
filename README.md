@@ -91,12 +91,10 @@ start its line, and the script fills it in:
 ```html
 <!-- chrome:store-badge -->             <!-- /chrome:store-badge -->
 <!-- chrome:app-cards -->               <!-- /chrome:app-cards -->
-<!-- chrome:doc-cards dates/ first-scan/ -->  <!-- /chrome:doc-cards -->
 ```
 
-`store-badge` is Apple's badge linked to the page's app. `app-cards` is a card
-per app. `doc-cards` is a card per named page of the app's manual, with the
-page's own title and blurb.
+`store-badge` is Apple's badge linked to the page's app, or to the app the
+marker names. `app-cards` is a card per app.
 
 An icon is pointed at, not copied. Its size and line weight come from the CSS
 of the place it sits in:
@@ -122,8 +120,10 @@ after the `<h1>`: the lead paragraph and the text. The "On this page" column is
 built by `site.js` from the page's own `<h2>`s and needs no markup at all.
 
 A **new app's manual** is a new entry in `MANUALS`, keyed by the app's id. Its
-pages live under the app's URL + `docs/`, and the app's page gets the header's
-"Read the manual" button with `"nav_cta": True`.
+pages live under the app's URL + `docs/`, and the footer links to it from every
+page of the site. The app's page links to it itself: in the hero and in its own
+documentation section. `"nav_cta": True` is separate from the manual; it repeats
+the page's store badge in the header once the page's own has scrolled away.
 
 ## Dark colours
 

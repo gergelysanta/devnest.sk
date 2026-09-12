@@ -28,8 +28,8 @@ all from the manual's table of contents in MANUALS.
 A page can ask for a component anywhere in its own content. The marker names
 the component and can carry arguments. A marker must start its line:
 
-    <!-- chrome:store-badge -->            <!-- /chrome:store-badge -->
-    <!-- chrome:doc-cards dates/ first-scan/ -->  <!-- /chrome:doc-cards -->
+    <!-- chrome:app-cards -->                  <!-- /chrome:app-cards -->
+    <!-- chrome:store-badge assetscout -->     <!-- /chrome:store-badge -->
 
 The stylesheets have one kind of region, the dark colours for a visitor whose
 system is dark (see build_dark_system). sitemap.xml is written whole.
@@ -111,11 +111,12 @@ COMPANY_PAGES = [
 # `group` opens a new heading in the sidebar, and the pages after it keep it
 # until the next one. The pages before the first group have no heading in the
 # sidebar; the small label above their title says `intro` instead. `blurb` is
-# the page's meta description, and the text of its card where the app page
-# links to it (see the doc-cards component).
+# the page's meta description.
 #
 # Adding a page here puts it in the sidebar of every page of the manual, and
-# re-links the previous and next buttons of its neighbours.
+# re-links the previous and next buttons of its neighbours. An app with a
+# manual is also linked to it from the footer, nested under the app, while a
+# page of that app is showing (see build_footer).
 MANUALS = {
     "assetscout": {
         "intro": "Getting started",
@@ -199,8 +200,8 @@ MANUALS = {
 # path → the page's own metadata. `app` skins the page in the app's colour and
 # puts the app's name beside DevNest in the header; leave it out for the
 # company pages. `layout` is a key of LAYOUTS, "page" if left out. `nav_cta`
-# repeats the app's store badge and manual link in the header, once the
-# page's own have scrolled away. The pages of a manual are not listed here:
+# repeats the app's store badge in the header, once the page's own has
+# scrolled away. The pages of a manual are not listed here:
 # they follow from MANUALS, and are put right after their app's page.
 PAGES = {
     "index.html": {
@@ -460,11 +461,13 @@ NAV = """<header class="nav" data-nav>
     </div>
 </header>"""
 
-# The page's two buttons, repeated in the header. They stay hidden until
+# The page's store badge, repeated in the header. It stays hidden until
 # site.js sees that no store badge of the page itself is on screen. Apple
 # asks for one badge per layout, so the header copy never shows next to one.
+# The manual is not repeated here: the page links to it in the hero, in its
+# own documentation section and in the footer.
 NAV_CTA = """<div class="nav__cta" data-nav-cta>
-{badge}{manual}
+{badge}
 </div>"""
 
 
@@ -482,12 +485,8 @@ def build_nav(meta):
         product = ('\n            <span class="brand__sep" aria-hidden="true">/</span>'
                    '\n            <span class="brand__product">%s</span>' % app["name"])
         if meta.get("nav_cta"):
-            manual = ""
-            if app_id in MANUALS:
-                manual = ('\n    <a class="btn btn--ghost" href="%s">Read the manual</a>'
-                          % manual_root(app))
-            cta = "\n\n" + indent(NAV_CTA.format(badge=indent(build_store_badge(meta, []), "    "),
-                                                 manual=manual), "        ")
+            cta = "\n\n" + indent(
+                NAV_CTA.format(badge=indent(build_store_badge(meta, []), "    ")), "        ")
 
     def current(page):
         return meta["url"].startswith(page["url"])
@@ -555,11 +554,28 @@ FOOTER = """<footer class="footer">
 
 def build_footer(meta):
     item = '                        <li><a href="%s">%s</a></li>'
+    with_manual = (
+        '                        <li><a href="%s">%s</a>\n'
+        '                            <ul class="footer__submenu">\n'
+        '                                <li><a href="%s">Manual</a></li>\n'
+        '                            </ul>\n'
+        '                        </li>')
+
+    def app_items():
+        """Each app, and, only while one of its own pages is showing, its
+        manual nested under it. Anywhere else the link would sit orphaned
+        next to apps it has nothing to do with."""
+        for app in APPS:
+            if app["id"] in MANUALS and meta.get("app") == app["id"]:
+                yield with_manual % (app["url"], app["name"], manual_root(app))
+            else:
+                yield item % (app["url"], app["name"])
+
     return FOOTER.format(
         logo=indent(LOGO, "                    "),
         tagline=TAGLINE,
         company=COMPANY,
-        app_links="\n".join(item % (app["url"], app["name"]) for app in APPS),
+        app_links="\n".join(app_items()),
         company_links="\n".join(item % (page["url"], page.get("footer", page["label"]))
                                 for page in COMPANY_PAGES),
     )
@@ -725,28 +741,6 @@ def build_app_cards(meta, args):
     )
 
 
-DOCCARD = """<a class="card" href="{url}">
-    <h4>{title}</h4>
-    <p>{blurb}</p>
-</a>"""
-
-
-def build_doc_cards(meta, args):
-    """A card for each named page of the page's app's manual, in the order
-    the marker names them. The title and the text are the page's own, from
-    MANUALS."""
-    app = APP[meta["app"]]
-    pages = {page["slug"]: page for page in MANUALS[app["id"]]["pages"]}
-    cards = []
-    for slug in args:
-        if slug not in pages:
-            raise SystemExit("doc-cards: %s has no page %s" % (app["name"], slug))
-        page = pages[slug]
-        cards.append(DOCCARD.format(url=manual_root(app) + slug, title=page["title"],
-                                    blurb=wrap(page["blurb"], "   ").lstrip()))
-    return "\n".join(cards)
-
-
 # Every region a page may hold. "top" and "bottom" must be on every page,
 # once; the rest wherever the page wants them.
 COMPONENTS = {
@@ -754,7 +748,6 @@ COMPONENTS = {
     "bottom": build_bottom,
     "store-badge": build_store_badge,
     "app-cards": build_app_cards,
-    "doc-cards": build_doc_cards,
 }
 
 REGION = re.compile(

@@ -68,7 +68,6 @@
                 <img src="/assets/img/badges/download-on-the-mac-app-store.svg"
                      alt="Download on the Mac App Store" width="156" height="40">
             </a>
-            <a class="btn btn--ghost" href="/apps/assetscout/docs/">Read the manual</a>
         </div>
 
         <nav class="nav__links" aria-label="Main">
@@ -590,7 +589,7 @@
 
 <section class="section section--alt" id="manual">
     <div class="wrap wrap--wide">
-        <div class="section__head section__head--center reveal">
+        <div class="section__head section__head--center reveal" style="margin-bottom: 0">
             <p class="eyebrow">Documentation</p>
             <h2 class="h-section">Written down properly</h2>
             <p class="lead">
@@ -598,46 +597,18 @@
                 can show — including the parts that are hard to guess, like which date a month is
                 built from and what a scan deliberately walks past.
             </p>
-        </div>
-
-        <div class="cards cards--wide stagger">
-            <!-- chrome:doc-cards first-scan/ dates/ scanning/skipping/ inspector/photographs/ reference/settings/ reference/shortcuts/ reference/messages/ -->
-            <a class="card" href="/apps/assetscout/docs/first-scan/">
-                <h4>Your first scan</h4>
-                <p>From an empty window to a grid of results, in the order it happens.</p>
-            </a>
-            <a class="card" href="/apps/assetscout/docs/dates/">
-                <h4>Where the dates come from</h4>
-                <p>Capture date, file dates, and why a photograph copied last week still lands in the month
-               it was taken.</p>
-            </a>
-            <a class="card" href="/apps/assetscout/docs/scanning/skipping/">
-                <h4>What a scan leaves out</h4>
-                <p>Application containers, the derived data inside a photo library, and files whose type
-               nothing could name.</p>
-            </a>
-            <a class="card" href="/apps/assetscout/docs/inspector/photographs/">
-                <h4>Photographs and EXIF</h4>
-                <p>The four EXIF sections, the numbers written out as words, and the tags the app has never
-               seen.</p>
-            </a>
-            <a class="card" href="/apps/assetscout/docs/reference/settings/">
-                <h4>Settings</h4>
-                <p>Both panes, switch by switch, with what each one is set to before you touch it.</p>
-            </a>
-            <a class="card" href="/apps/assetscout/docs/reference/shortcuts/">
-                <h4>Keyboard shortcuts</h4>
-                <p>Every shortcut the app has, and the two the mouse has.</p>
-            </a>
-            <a class="card" href="/apps/assetscout/docs/reference/messages/">
-                <h4>Messages, and what they mean</h4>
-                <p>Every message AssetScout can put on screen, why it appears, and what to do about it.</p>
-            </a>
-            <!-- /chrome:doc-cards -->
-            <a class="card" href="/apps/assetscout/docs/">
-                <h4>Start at the beginning</h4>
-                <p>What AssetScout is for, and what it does to your files.</p>
-            </a>
+            <p class="lead">
+                Read it from the beginning, or go straight to the reference pages for a setting, a
+                shortcut or a message. The same manual is in the app as well, under
+                <span class="ui">Help &gt; AssetScout Help</span>, in English, German, Hungarian
+                and Slovak.
+            </p>
+            <div class="cta-row hero__cta">
+                <a class="btn btn--primary" href="/apps/assetscout/docs/">
+                    Read the manual
+                    <svg aria-hidden="true"><use href="/assets/img/icons.svg#arrow"></use></svg>
+                </a>
+            </div>
         </div>
     </div>
 </section>
@@ -649,10 +620,9 @@
 <section class="section section--tight">
     <div class="wrap wrap--wide">
         <div class="section__head section__head--center reveal" style="margin-bottom: 0">
-            <h2 class="h-section">Written in Swift, for macOS 14.4 and newer</h2>
+            <h2 class="h-section">For macOS 14.4 and newer</h2>
             <p class="lead">
-                SwiftUI for the interface, with an AppKit collection view for the thumbnail grid,
-                because the grid has to stay smooth with tens of thousands of items in it.
+                The thumbnail grid stays smooth even with tens of thousands of files in it.
             </p>
             <div class="cta-row hero__cta">
                 <!-- chrome:store-badge -->
@@ -661,7 +631,6 @@
                          alt="Download on the Mac App Store" width="156" height="40">
                 </a>
                 <!-- /chrome:store-badge -->
-                <a class="btn btn--ghost" href="/support/">Get in touch</a>
             </div>
         </div>
     </div>
@@ -689,7 +658,11 @@
                     <h5>Apps</h5>
                     <ul>
                         <li><a href="/apps/tracktiv/">Tracktiv</a></li>
-                        <li><a href="/apps/assetscout/">AssetScout</a></li>
+                        <li><a href="/apps/assetscout/">AssetScout</a>
+                            <ul class="footer__submenu">
+                                <li><a href="/apps/assetscout/docs/">Manual</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
