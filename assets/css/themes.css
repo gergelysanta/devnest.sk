@@ -628,3 +628,189 @@ html:not(.js) .ring__value { stroke-dashoffset: calc(var(--circ, 314) * (1 - var
 .roadmap li:last-child { border-bottom: 0; }
 .roadmap svg { width: 18px; height: 18px; margin-top: .18em; stroke-width: 2.2; color: var(--accent); }
 .roadmap b { display: block; color: var(--ink); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   2.5 AssetScout scenes
+   -------------------------------------------------------------------------- */
+
+/* Three folders dropped on the empty window, over and over.
+
+   The picture under the scene is a real capture, so nothing inside it can
+   move. Everything that moves is drawn on top of it: the stack of folders,
+   the pointer that holds them, and the two marks the landing leaves. The
+   scene draws no app interface of its own, and it does not touch the arrow in
+   the picture either — the folders land in the empty part of the window above
+   it, where a hand would drop them, and the message under the arrow stays
+   readable the whole time.
+
+   The round is one move and one landing. The folders come in from off the
+   page, leaning the way they are carried, straighten as they arrive, wait,
+   and are then thrown off: they shrink away in a quarter of a second while a
+   ring opens from the point where they were let go. There is no second,
+   correcting move, because a hand does not make one.
+
+   .dropscene__drag and .dropscene__land are layers as large as the picture,
+   so the percentages in them are percentages of the picture, not of the
+   folders. Both end at --drop-x / --drop-y, which is where the folders are
+   let go. site.js writes those two again before each round, so the drop never
+   lands in the same place twice; the values below are what a page without
+   scripting gets.
+
+   One round takes 5s: 1.4s of travel, 1s held, the release at 2.4s, the ring
+   gone by 3.6s, and the rest is the pause before it starts again. */
+
+/* The folders start off the right edge of the page, not at the edge of the
+   picture, so they read as something brought in from outside rather than as
+   part of the screenshot. Nothing may clip them before that, and the picture
+   least of all, so the section takes the job. It is as wide as the page, so
+   the scene can reach past the picture without pushing the page sideways.
+   `clip` and not `hidden`, and only on one axis: the section must not become
+   a scroll container, and the vertical side of it has nothing to cut. */
+.section:has(.dropscene) { overflow-x: clip; }
+
+.dropscene {
+    position: relative;
+    /* The picture is centred inside .shot--free at the same width, and the
+       overlays are placed in percentages of it, so the scene has to stop
+       where the picture stops. */
+    max-width: var(--w, 100%);
+    margin-inline: auto;
+}
+
+/* Everything hangs off the arrow in the picture, measured on the file:
+   empty.webp is 1782x1408, and the arrow glyph covers x 808-973, y 546-745.
+   So the arrow is at 50% across and 45.8% down. --drop-y then carries the
+   folders up from there, far enough that they clear the arrow entirely. */
+.dropscene__drag {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Where the folders rest: with the animation skipped for reduced motion,
+       this is the still the scene falls back to. */
+    translate: var(--drop-x, 8%) var(--drop-y, -17%);
+    animation: as-drag 5s cubic-bezier(.2, .68, .28, 1) infinite;
+}
+
+/* The stack runs two animations at once, because the two halves of what it
+   does want different easings. as-stack is the plain fade, and as-lean is the
+   tilt and the size — the lean it is carried at, and the snap away at the
+   end. They never touch the same property, so neither has to know about the
+   other. */
+.dropscene__stack {
+    position: absolute;
+    left: 50%;
+    top: 45.8%;
+    width: 19%;
+    height: auto;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 8px 14px rgba(9, 16, 26, .22));
+    animation: as-stack 5s linear infinite,
+               as-lean 5s cubic-bezier(.4, .08, .25, 1) infinite;
+}
+/* The pointer holds the stack above and left of its middle, which is where a
+   hand grabs a folder. It has to stay clear of the badge in the corner, so
+   these two numbers are not the stack's corner but a point inside it. */
+.dropscene__pointer {
+    position: absolute;
+    left: 46.8%;
+    top: 43%;
+    width: 3.2%;
+    height: auto;
+    filter: drop-shadow(0 2px 4px rgba(9, 16, 26, .3));
+    animation: as-pointer 5s linear infinite;
+}
+
+/* What the landing leaves behind: a ring that opens outwards and a glow under
+   it. Both are the page's own flourish, not something the app draws, so they
+   are gone in a second. The ring is what makes the drop land — a fade on its
+   own reads as the folders simply going missing. */
+.dropscene__land {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    translate: var(--drop-x, 8%) var(--drop-y, -17%);
+}
+/* The scale of these three, and of the stack above, is written into the
+   `transform` next to the centring translate and not into the `scale`
+   property. The two are not the same: `scale` is applied after `transform`,
+   so it would shrink the -50% that centres the mark as well, and the mark
+   would slide away from the point it is supposed to mark while it grows. */
+.dropscene__glow,
+.dropscene__ring {
+    position: absolute;
+    left: 50%;
+    top: 45.8%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+.dropscene__glow {
+    width: 15%;
+    background: radial-gradient(circle,
+        color-mix(in srgb, var(--accent) 50%, transparent), transparent 70%);
+    animation: as-glow 5s var(--ease) infinite;
+}
+.dropscene__ring {
+    width: 13%;
+    border: 2px solid var(--accent);
+    animation: as-ring 5s cubic-bezier(.15, .75, .3, 1) infinite;
+}
+
+/* The travel. The start is written as three quarters of a picture plus a
+   fifth of the window, because a share of the picture alone is not enough: on
+   a wide page the picture is small and the empty margin beside it is large,
+   and the folders would appear out of nothing in that margin instead of
+   coming in from the side. The 20vw is what carries them past the edge of the
+   page at any width, from a 375px phone to a 1920px display.
+
+   -36% puts the start at the height of the window's title bar, so they come
+   in from the right and a little from above. From there it is one move: the
+   animation's own ease slows them into the drop point and they stop. */
+@keyframes as-drag {
+    0%        { translate: calc(75% + 20vw) -36%; }
+    28%, 100% { translate: var(--drop-x, 8%) var(--drop-y, -17%); }
+}
+
+/* The fade in is over while the folders are still off the page. */
+@keyframes as-stack {
+    0%        { opacity: 0; }
+    6%, 48%   { opacity: 1; }
+    57%, 100% { opacity: 0; }
+}
+
+/* Carried in at a tilt and a little larger. The tilt is given a slower curve
+   than the travel and 34% instead of 28%, so it is still leaning while it
+   crosses the window and only comes straight once it has settled. With the
+   travel's own curve the lean was over before the folders were on the page at
+   all.
+
+   On release the easing turns around: the folders hold still for the first
+   moments and then go, instead of slipping away from the start. */
+@keyframes as-lean {
+    0%        { transform: translate(-50%, -50%) scale(1.12) rotate(-12deg); }
+    34%, 48%  { transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                animation-timing-function: cubic-bezier(.5, 0, .85, .35); }
+    57%, 100% { transform: translate(-50%, -50%) scale(.55) rotate(4deg); }
+}
+
+/* The pointer stays a moment after the folders are gone, then fades. */
+@keyframes as-pointer {
+    0%        { opacity: 0; }
+    6%, 53%   { opacity: 1; }
+    64%, 100% { opacity: 0; }
+}
+
+@keyframes as-glow {
+    0%, 48%   { opacity: 0; transform: translate(-50%, -50%) scale(.3); }
+    54%       { opacity: .85; transform: translate(-50%, -50%) scale(.85); }
+    68%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25); }
+}
+
+/* The ring starts a touch before the folders have finished going, so the two
+   read as one event rather than as a fade followed by a ring. */
+@keyframes as-ring {
+    0%, 48%   { opacity: 0; transform: translate(-50%, -50%) scale(.25); }
+    51%       { opacity: .85; transform: translate(-50%, -50%) scale(.45); }
+    72%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(2.1); }
+}

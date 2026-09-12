@@ -226,13 +226,72 @@
 
             <div class="split__media reveal" style="--delay: 100ms">
                 <div class="shot shot--free settle" data-range="10" style="--w: 891px">
-                    <picture>
-                        <source data-dark-source media="(prefers-color-scheme: dark)"
-                                srcset="/assets/img/apps/assetscout/empty-dark.webp">
-                        <img src="/assets/img/apps/assetscout/empty.webp"
-                             alt="The empty AssetScout window, with a large downward arrow and the words Drop directories here, to scan them for files"
-                             width="1782" height="1408" loading="lazy">
-                    </picture>
+                    <!-- The picture is a still. The folders, the pointer and the glow are
+                         drawn over it and animated in themes.css, section 2.5. -->
+                    <div class="dropscene">
+                        <picture>
+                            <source data-dark-source media="(prefers-color-scheme: dark)"
+                                    srcset="/assets/img/apps/assetscout/empty-dark.webp">
+                            <img src="/assets/img/apps/assetscout/empty.webp"
+                                 alt="The empty AssetScout window, with a large downward arrow and the words Drop directories here, to scan them for files"
+                                 width="1782" height="1408" loading="lazy">
+                        </picture>
+
+                        <div class="dropscene__land" aria-hidden="true">
+                            <i class="dropscene__glow"></i>
+                            <i class="dropscene__ring"></i>
+                        </div>
+
+                        <div class="dropscene__drag" aria-hidden="true">
+                            <!-- Three folders held as one stack, the way macOS draws a drag
+                                 of several items: the copies behind, and a badge counting
+                                 them on the front one. -->
+                            <!-- The outline is what separates the three folders from each other.
+                                 It is a mid blue, not white: white was a halo around the stack
+                                 on a dark page, and on a light one it did nothing the white
+                                 window was not already doing. It sits between the two fills,
+                                 so it is a line against both, and it only has to be strong
+                                 enough to keep the three folders apart. -->
+                            <svg class="dropscene__stack" viewBox="0 0 156 112"
+                                 stroke="#4ba5e6" stroke-width="1.6" stroke-linejoin="round">
+                                <defs>
+                                    <linearGradient id="as-folder-back" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0" stop-color="#88cbf6"></stop>
+                                        <stop offset="1" stop-color="#63b0e8"></stop>
+                                    </linearGradient>
+                                    <linearGradient id="as-folder-front" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0" stop-color="#55b3f2"></stop>
+                                        <stop offset="1" stop-color="#2b8ade"></stop>
+                                    </linearGradient>
+                                    <!-- A folder 120 wide and 90 tall: the back carries the tab,
+                                         and the front sheet starts 18 lower, so the tab and a
+                                         strip of the back stay visible above it. -->
+                                    <g id="as-folder">
+                                        <path fill="url(#as-folder-back)"
+                                              d="M0 12A12 12 0 0 1 12 0h28a12 12 0 0 1 8.5 3.5L58 12h50a12 12 0 0 1 12 12v54a12 12 0 0 1-12 12H12A12 12 0 0 1 0 78Z"></path>
+                                        <rect x="0" y="18" width="120" height="72" rx="12" fill="url(#as-folder-front)"></rect>
+                                    </g>
+                                </defs>
+                                <!-- The same folder three times, fanned around its own centre,
+                                     the way macOS draws a drag of several items. -->
+                                <use href="#as-folder" transform="translate(18 14) rotate(5 60 45)"></use>
+                                <use href="#as-folder" transform="translate(18 12) rotate(-4 60 45)"></use>
+                                <use href="#as-folder" transform="translate(18 11)"></use>
+                                <!-- The badge keeps the size it has on screen while the folders
+                                     shrink, so inside the drawing it grows instead. -->
+                                <circle cx="20" cy="17" r="16" fill="#ff453a" stroke="none"></circle>
+                                <text x="20" y="17" fill="#ffffff" stroke="none" font-size="20" font-weight="600"
+                                      text-anchor="middle" dominant-baseline="central">3</text>
+                            </svg>
+
+                            <svg class="dropscene__pointer" viewBox="0 0 24 34">
+                                <path d="M3 2 18 17.4 11.8 17.9 16.4 27.5 12.6 29.3 8.2 19.8 3 24.8Z"
+                                      fill="#ffffff" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"></path>
+                                <path d="M3 2 18 17.4 11.8 17.9 16.4 27.5 12.6 29.3 8.2 19.8 3 24.8Z"
+                                      fill="#1d1d1f"></path>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

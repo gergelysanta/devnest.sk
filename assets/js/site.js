@@ -3,8 +3,8 @@
    Plain ES2019, no framework and no build step. A handful of small jobs:
    the appearance switch, the header, the apps menu, the manual's sidebar and
    its "On this page", the scroll reveals, the numbers that count up, the
-   pointer parallax on the home stage, and the drift of a figure as it goes
-   by.
+   pointer parallax on the home stage, the drift of a figure as it goes by,
+   and where the folders land in a drop scene.
    ========================================================================== */
 
 (function () {
@@ -479,6 +479,36 @@
     }
 
     /* ----------------------------------------------------------------------
+       Where the folders land in a drop scene
+
+       The scene drops folders on a window by hand, and a hand does not put
+       them in the same place twice. --drop-x and --drop-y are the point the
+       keyframes end on, and they are written again before every round.
+
+       The range is the empty part of the window above the arrow, in
+       percentages of the picture: -14% to 14% across, -20% to -14% down. The
+       CSS explains where those come from. A new point is written when the
+       animation starts its next round, which is the moment the folders are
+       invisible — between the fade out of one round and the fade in of the
+       next — so the jump is never seen.
+       ---------------------------------------------------------------------- */
+
+    function setupDropscene() {
+        each(document.querySelectorAll(".dropscene"), function (scene) {
+            var drag = scene.querySelector(".dropscene__drag");
+            if (!drag) return;
+
+            function place() {
+                scene.style.setProperty("--drop-x", (Math.random() * 28 - 14).toFixed(1) + "%");
+                scene.style.setProperty("--drop-y", (Math.random() * 6 - 20).toFixed(1) + "%");
+            }
+
+            place();
+            drag.addEventListener("animationiteration", place);
+        });
+    }
+
+    /* ----------------------------------------------------------------------
        Footer year
        ---------------------------------------------------------------------- */
 
@@ -501,6 +531,7 @@
         setupStage();
         setupParallax();
         setupSettle();
+        setupDropscene();
         setupYear();
     }
 
