@@ -68,12 +68,14 @@ APPS = [
         "name": "Tracktiv",
         "url": "/apps/tracktiv/",
         "icon": "/assets/img/apps/tracktiv/icon-256.png",
-        "state": "beta",
-        "state_label": "Beta · TestFlight",
-        "summary": "Writes your working day down for you.",
-        "card": "A time tracker for people who keep three projects going at once. It "
-                "records the working day while the day happens and hands it back at the "
-                "end of it — no timers, no account, nothing leaves the Mac.",
+        # Not finished yet, so it is only teased. The full page and the home
+        # page's section about it wait in drafts/ (see drafts/README.md).
+        "state": "building",
+        "state_label": "Coming soon",
+        "summary": "Writes your working day down for you. Coming soon.",
+        "card": "A time tracker for people who keep multiple projects going at once. It "
+                "records the working day while it happens and shows it back to you in the "
+                "evening. We are finishing it now.",
     },
     {
         "id": "assetscout",
@@ -214,10 +216,10 @@ PAGES = {
     "apps/tracktiv/index.html": {
         "url": "/apps/tracktiv/",
         "app": "tracktiv",
-        "title": "Tracktiv — the Mac time tracker that writes the day down for you · DevNest",
-        "description": "Tracktiv records your working day on its own and hands it back at "
-                       "the end of it: what you worked on, how long each project took, "
-                       "where the breaks were. No timers, no account, nothing leaves your Mac.",
+        "title": "Tracktiv — coming soon · DevNest",
+        "description": "Tracktiv records your working day on its own and shows it back "
+                       "to you in the evening: what you worked on, for how long, and where "
+                       "the breaks were. Coming soon to the Mac.",
     },
     "apps/assetscout/index.html": {
         "url": "/apps/assetscout/",

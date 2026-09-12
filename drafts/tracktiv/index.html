@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+<!-- chrome:top -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Tracktiv — the Mac time tracker that writes the day down for you · DevNest</title>
+<meta name="description" content="Tracktiv records your working day on its own and hands it back at the end of it: what you worked on, how long each project took, where the breaks were. No timers, no account, nothing leaves your Mac.">
+<link rel="canonical" href="https://devnest.sk/apps/tracktiv/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DevNest">
+<meta property="og:title" content="Tracktiv — the Mac time tracker that writes the day down for you · DevNest">
+<meta property="og:description" content="Tracktiv records your working day on its own and hands it back at the end of it: what you worked on, how long each project took, where the breaks were. No timers, no account, nothing leaves your Mac.">
+<meta property="og:url" content="https://devnest.sk/apps/tracktiv/">
+<meta property="og:image" content="https://devnest.sk/assets/img/brand/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://devnest.sk/assets/img/brand/og.png">
+
+<link rel="icon" href="/assets/img/brand/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/img/brand/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/img/brand/icon-180.png">
+
+<!-- Every page sets its text in this file, so it is fetched together with the
+     stylesheet instead of after it. Then the text rarely shows up in the
+     system font first and switches a moment later. -->
+<link rel="preload" href="/assets/fonts/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/themes.css">
+
+<!-- The stored appearance is applied before the first paint, so a visitor who
+     chose dark never sees a white flash on the way in. -->
+<script>
+(function () {
+    try {
+        var stored = localStorage.getItem("appearance");
+        if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-appearance", stored);
+        }
+    } catch (e) { /* private browsing: fall back to the system setting */ }
+    document.documentElement.classList.add("js");
+})();
+</script>
+</head>
+
+<body data-app="tracktiv">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="nav" data-nav>
+    <div class="wrap wrap--wide nav__inner">
+
+        <a class="brand" href="/">
+            <picture class="brand__logo">
+                <source data-dark-source media="(prefers-color-scheme: dark)"
+                        srcset="/assets/img/brand/DevNestLogoDark.svg">
+                <img src="/assets/img/brand/DevNestLogo.svg" alt="DevNest" width="115" height="46">
+            </picture>
+            <span class="brand__sep" aria-hidden="true">/</span>
+            <span class="brand__product">Tracktiv</span>
+        </a>
+
+        <nav class="nav__links" aria-label="Main">
+            <div class="menu" data-menu>
+                <button class="menu__btn is-current" type="button" aria-expanded="false" aria-controls="apps-menu">
+                    Apps<span class="chev" aria-hidden="true"></span>
+                </button>
+                <div class="menu__panel" id="apps-menu" hidden>
+                    <a class="menu__row is-current" href="/apps/tracktiv/">
+                        <img class="appicon menu__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="30" height="30" loading="lazy">
+                        <span class="menu__text">
+                            <span class="menu__name">Tracktiv<em class="dot dot--beta"></em></span>
+                            <span class="menu__sub">Writes your working day down for you.</span>
+                        </span>
+                    </a>
+                    <a class="menu__row" href="/apps/assetscout/">
+                        <picture class="appicon menu__icon">
+                            <source data-dark-source media="(prefers-color-scheme: dark)"
+                                    srcset="/assets/img/apps/assetscout/icon-dark.svg">
+                            <img src="/assets/img/apps/assetscout/icon.svg" alt="" width="30" height="30" loading="lazy">
+                        </picture>
+                        <span class="menu__text">
+                            <span class="menu__name">AssetScout<em class="dot dot--shipping"></em></span>
+                            <span class="menu__sub">Finds the file when you know the date, not the folder.</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <a href="/company/">Company</a>
+            <a href="/support/">Support</a>
+        </nav>
+
+        <button class="iconbtn appearance" type="button" data-appearance-toggle aria-label="Switch appearance">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4.2"></circle>
+                <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"></path>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2z"></path>
+            </svg>
+            <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3.2" y="4.5" width="17.6" height="12" rx="2"></rect>
+                <path d="M8.4 20h7.2M12 16.5v3.5"></path>
+            </svg>
+        </button>
+
+        <button class="iconbtn burger" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav-sheet" aria-label="Menu">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <div class="sheet" id="nav-sheet" data-nav-sheet hidden>
+        <div class="wrap sheet__inner">
+            <p class="sheet__head">Apps</p>
+            <a class="menu__row is-current" href="/apps/tracktiv/">
+                <img class="appicon menu__icon" src="/assets/img/apps/tracktiv/icon-256.png" alt="" width="30" height="30" loading="lazy">
+                <span class="menu__text">
+                    <span class="menu__name">Tracktiv<em class="dot dot--beta"></em></span>
+                    <span class="menu__sub">Writes your working day down for you.</span>
+                </span>
+            </a>
+            <a class="menu__row" href="/apps/assetscout/">
+                <picture class="appicon menu__icon">
+                    <source data-dark-source media="(prefers-color-scheme: dark)"
+                            srcset="/assets/img/apps/assetscout/icon-dark.svg">
+                    <img src="/assets/img/apps/assetscout/icon.svg" alt="" width="30" height="30" loading="lazy">
+                </picture>
+                <span class="menu__text">
+                    <span class="menu__name">AssetScout<em class="dot dot--shipping"></em></span>
+                    <span class="menu__sub">Finds the file when you know the date, not the folder.</span>
+                </span>
+            </a>
+            <p class="sheet__head">DevNest</p>
+            <a class="sheet__link" href="/company/">Company</a>
+            <a class="sheet__link" href="/support/">Support</a>
+            <a class="sheet__link" href="/privacy/">Privacy policy</a>
+        </div>
+    </div>
+</header>
+
+<main id="main">
+<!-- /chrome:top -->
+
+<!-- ======================================================================
+     Hero
+     ====================================================================== -->
+
+<section class="hero">
+    <div class="wrap wrap--wide hero__inner">
+        <p class="eyebrow reveal">Tracktiv · for macOS 14 and later</p>
+
+        <h1 class="h-display reveal" style="--delay: 60ms">
+            You didn't lose the day.<br>Here is where it went.
+        </h1>
+
+        <p class="hero__lead reveal" style="--delay: 140ms">
+            Tracktiv is a time tracker for people who keep multiple projects going at once and
+            bill none of them to anybody. It records your working day on its own and hands it
+            back at the end of it — so at seven in the evening there is an answer instead of
+            a blank.
+        </p>
+
+        <div class="cta-row hero__cta reveal" style="--delay: 220ms">
+            <!-- TODO: swap in the public TestFlight URL once the build is out.
+                 It appears twice: here and in #beta. -->
+            <a class="btn btn--primary" href="#beta">
+                Join the beta
+                <svg aria-hidden="true"><use href="/assets/img/icons.svg#arrow"></use></svg>
+            </a>
+            <a class="btn btn--ghost" href="#day">Look at a day</a>
+            <span class="btn__note">TestFlight first · App Store later</span>
+        </div>
+
+        <p class="hero__facts reveal" style="--delay: 300ms">
+            <span>macOS 14 or later</span>
+            <span>No network permission</span>
+            <span>English · Deutsch · Magyar · Slovenčina</span>
+        </p>
+
+        <div class="hero__stage reveal" style="--delay: 380ms">
+            <div class="shot shot--window" style="--w: 1244px">
+                <img src="/assets/img/apps/tracktiv/details-day.webp"
+                     alt="Tracktiv's day window: a month of rings on the left, the day drawn hour by hour in the middle, the list of activities and the applications on the right"
+                     width="2488" height="1638" fetchpriority="high">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     One day, read out loud
+     ====================================================================== -->
+
+<section class="section section--alt" id="day">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">A day</p>
+            <h2 class="h-section">This was a Monday</h2>
+            <p class="lead">
+                Nobody wrote any of it down. Every screenshot on this page is a real day out of
+                the Mac this app is written on, drawn the way Tracktiv draws every day.
+            </p>
+        </div>
+
+        <div class="shot shot--free wipe reveal" style="--w: 1424px">
+            <picture>
+                <source data-dark-source media="(prefers-color-scheme: dark)"
+                        srcset="/assets/img/apps/tracktiv/crop-daystrip-dark.webp">
+                <img src="/assets/img/apps/tracktiv/crop-daystrip.webp"
+                     alt="A whole day drawn as one bar: coloured blocks from eight in the morning to eleven at night, with the gaps between them"
+                     width="2847" height="237" loading="lazy">
+            </picture>
+        </div>
+
+        <div class="features features--3 reveal" style="margin-top: clamp(2rem, 4vw, 3rem)">
+            <div class="feature">
+                <h4>It opened with television</h4>
+                <p>
+                    Thirty-seven minutes of a series at eight in the morning, in green, before
+                    anything else. Tracktiv named it after what was playing and filed it under
+                    Entertainment without being asked.
+                </p>
+            </div>
+            <div class="feature">
+                <h4>The middle belonged to a client</h4>
+                <p>
+                    Light blue is the client's project, dark blue our own, and they alternate all
+                    morning. Four hours and ten minutes went one way and four hours fifty-two the
+                    other — in pieces nobody counted at the time.
+                </p>
+            </div>
+            <div class="feature">
+                <h4>The purple block is the call</h4>
+                <p>
+                    Forty-three minutes at half past two. The camera came on, Tracktiv switched to
+                    Meeting on its own, and when the call ended the work that had been running
+                    picked up again.
+                </p>
+            </div>
+        </div>
+
+        <div class="stats reveal" style="--delay: 100ms">
+            <div class="stat">
+                <div class="stat__n"><span class="count" data-count="10.4">10.4</span><small>h</small></div>
+                <div class="stat__l">measured that day, to the second</div>
+            </div>
+            <div class="stat">
+                <div class="stat__n"><span class="count" data-count="34">34</span></div>
+                <div class="stat__l">separate stretches of work in it</div>
+            </div>
+            <div class="stat">
+                <div class="stat__n"><span class="count" data-count="0">0</span></div>
+                <div class="stat__l">times a timer was started by hand</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     It arrives already written
+     ====================================================================== -->
+
+<section class="section" id="automatic">
+    <div class="wrap wrap--wide">
+        <div class="section__head reveal">
+            <p class="eyebrow">Nothing to remember</p>
+            <h2 class="h-section">The day arrives already written</h2>
+            <p class="lead">
+                There is no timer to start and nothing to fill in afterwards. Tracktiv watches
+                which app and which window you are working in, and by the evening the list has
+                names on it, breaks in it, and the calls in the right place.
+            </p>
+        </div>
+
+        <div class="split split--wide-right split--top">
+            <div class="split__media reveal">
+                <div class="mat">
+                    <div class="shot shot--detail" style="--w: 279px">
+                        <img src="/assets/img/apps/tracktiv/crop-daylist.webp"
+                             alt="A list of one day's activities with start and end times, durations, category icons and the breaks between them"
+                             width="558" height="735" loading="lazy">
+                    </div>
+                </div>
+                <p class="shot__caption">
+                    A different day, activity by activity — two hours of a game before lunch, the
+                    client all afternoon, and every break in between
+                </p>
+            </div>
+
+            <div class="reveal" style="--delay: 100ms">
+                <div class="features features--2">
+                    <div class="feature">
+                        <span class="feature__mark">
+                            <svg aria-hidden="true"><use href="/assets/img/icons.svg#display"></use></svg>
+                        </span>
+                        <h4>It knows one project from another</h4>
+                        <p>
+                            Not just "Xcode" — the window title says which project is open in it.
+                            One editor can drive a different activity for every job you have on.
+                        </p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature__mark">
+                            <svg aria-hidden="true"><use href="/assets/img/icons.svg#clock"></use></svg>
+                        </span>
+                        <h4>A break is a break</h4>
+                        <p>
+                            Leave the Mac and the activity ends by itself. Come back and a new one
+                            starts. Lunch never quietly becomes two hours of work.
+                        </p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature__mark">
+                            <svg aria-hidden="true"><use href="/assets/img/icons.svg#camera"></use></svg>
+                        </span>
+                        <h4>A call is a call</h4>
+                        <p>
+                            The moment your camera or microphone goes live the activity becomes
+                            Meeting, and when the call ends the work you were on picks up again.
+                        </p>
+                    </div>
+
+                    <div class="feature">
+                        <span class="feature__mark">
+                            <svg aria-hidden="true"><use href="/assets/img/icons.svg#gamepad"></use></svg>
+                        </span>
+                        <h4>An evening off looks like one</h4>
+                        <p>
+                            A game in front of you starts a Gaming activity named after the game.
+                            The hours you did not work are worth seeing too.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mat mat--flush" style="margin-top: clamp(1.5rem, 3vw, 2.2rem)">
+                    <div class="shot shot--detail" style="--w: 463px">
+                        <img src="/assets/img/apps/tracktiv/crop-triggers.webp"
+                             alt="Three rules in Tracktiv's settings, each naming an activity and the applications that trigger it"
+                             width="925" height="450" loading="lazy">
+                    </div>
+                </div>
+                <p class="shot__caption">
+                    You write these once — an app, and a piece of its window title. After that the
+                    labelling is Tracktiv's job, and a rule can switch straight away or ask first.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Which project moved
+     ====================================================================== -->
+
+<section class="section section--alt" id="projects">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left split--flip">
+            <div class="split__media reveal">
+                <div class="mat">
+                    <div class="shot shot--detail" style="--w: 315px">
+                        <img src="/assets/img/apps/tracktiv/crop-times.webp"
+                             alt="One day added up per activity: television, the client's project, a meeting, our own product, a system update, and the total"
+                             width="630" height="470" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <div class="split__text reveal" style="--delay: 100ms">
+                <p class="eyebrow">Multiple projects at once</p>
+                <h3 class="h-sub">Which one actually moved today?</h3>
+                <p>
+                    This is the question the evening turns on. Not "was I busy" — you know you
+                    were busy — but whether the thing you meant to finish got any of it.
+                </p>
+                <p>
+                    Tracktiv adds the day up per activity and per category, so five scattered
+                    stretches on the same project show up as one number. The bar across the top is
+                    the whole day in proportion: how much was your own work, how much was the
+                    client's, how much was neither.
+                </p>
+                <ul class="facts">
+                    <li><b>Categories carry your colours.</b> Every activity is filed under
+                        exactly one, and the charts add up by kind of work rather than by name.</li>
+                    <li><b>Rename a category and your history follows.</b> The change reaches back
+                        through everything already recorded.</li>
+                    <li><b>Nothing gets rounded.</b> The numbers here are the measured ones, to
+                        the second.</li>
+                </ul>
+
+                <div class="chips">
+                    <span class="chip" style="--c: var(--c-devnest)"><i></i>DevNest Work</span>
+                    <span class="chip" style="--c: var(--c-work)"><i></i>Work</span>
+                    <span class="chip" style="--c: var(--c-meeting)"><i></i>Meeting</span>
+                    <span class="chip" style="--c: var(--c-fun)"><i></i>Entertainment</span>
+                    <span class="chip" style="--c: var(--c-gaming)"><i></i>Gaming</span>
+                    <span class="chip" style="--c: var(--c-activity)"><i></i>Activity</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     The honest side: applications
+     ====================================================================== -->
+
+<section class="section">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left">
+            <div class="split__text reveal">
+                <p class="eyebrow">The other side</p>
+                <h3 class="h-sub">What was actually in front of you</h3>
+                <p>
+                    Alongside your own labels, Tracktiv keeps the app side of the same hours: how
+                    long each application was the one you were looking at, day by day.
+                </p>
+                <p>
+                    It is the less flattering view, and the more useful one. Five hours on the
+                    project, yes — and half an hour of mail inside them, in pieces you never
+                    noticed.
+                </p>
+                <p>
+                    Select an activity and the list narrows to the apps that were in front of you
+                    during it. Click an application and its stretches light up red in the graph
+                    above, so you can see exactly where the half hour went.
+                </p>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="mat">
+                    <div class="shot shot--detail" style="--w: 279px">
+                        <img src="/assets/img/apps/tracktiv/crop-apps.webp"
+                             alt="Per-application time for one day, each app with its icon and its total"
+                             width="558" height="645" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     The month
+     ====================================================================== -->
+
+<section class="section section--alt" id="month">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-right split--flip">
+            <div class="split__media reveal">
+                <div class="mat">
+                    <div class="shot shot--detail" style="--w: 315px">
+                        <img src="/assets/img/apps/tracktiv/crop-month.webp"
+                             alt="A month of days, each drawn as a small ring with its total underneath; several rings carry red"
+                             width="630" height="800" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <div class="split__text reveal" style="--delay: 100ms">
+                <p class="eyebrow">The longer view</p>
+                <h3 class="h-sub">A month you can read in one look</h3>
+                <p>
+                    Every day is a ring, and the ring fills as the day does. Your own working day
+                    length is the mark it is measured against — past it, the ring turns red.
+                </p>
+                <p>
+                    You do not have to read a single number to see it: the heavy weeks are the
+                    solid green ones, the days that ran long carry red, and the quiet Saturdays
+                    are barely a stroke. Patterns you would never notice from inside them turn up
+                    here — the fortnight that quietly became eleven-hour days, the two weekends
+                    that were not weekends.
+                </p>
+
+                <div style="display: flex; align-items: center; gap: 1.4rem; margin-top: 2rem; flex-wrap: wrap">
+                    <svg class="ring" viewBox="0 0 120 120" style="--p: .82; --circ: 314; width: 104px; flex: none" aria-hidden="true">
+                        <circle class="ring__track" cx="60" cy="60" r="50"></circle>
+                        <circle class="ring__value" cx="60" cy="60" r="50"></circle>
+                    </svg>
+                    <p class="muted" style="font-size: .95rem; max-width: 30ch">
+                        The same ring sits in the menu bar all day. A glance at it tells you how
+                        much of your working day is gone, without opening anything.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Editing
+     ====================================================================== -->
+
+<section class="section" id="fix">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left">
+            <div class="split__text reveal">
+                <p class="eyebrow">Yours to correct</p>
+                <h3 class="h-sub">Got it wrong? Fixing it takes a second</h3>
+                <p>
+                    Automatic tracking is right most of the time, not all of it. So the record is
+                    yours to edit: click the menu bar icon, rename what it called the last hour,
+                    move it to another category, split it in two where the work actually changed,
+                    or merge the three pieces it made of one job.
+                </p>
+                <p>
+                    <span class="kbd">⌘Z</span> takes back anything you did not mean, and the week
+                    above the list tells you
+                    which day to open next.
+                </p>
+                <ul class="facts">
+                    <li><b>The running activity is editable while it runs.</b> A keyboard shortcut
+                        puts the cursor straight in its name.</li>
+                    <li><b>Breaks are part of the record.</b> A day of solid work and a day of five
+                        restarts are not the same day, and it shows.</li>
+                    <li><b>Start something by hand any time.</b> Automatic tracking is the default,
+                        not the only way in.</li>
+                </ul>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="mat">
+                    <div class="shot shot--detail parallax" data-speed="0.05" style="--w: 367px">
+                        <img src="/assets/img/apps/tracktiv/popover.webp"
+                             alt="The Tracktiv popover: the running activity at the top, the week below it as seven rings"
+                             width="734" height="522" loading="lazy">
+                    </div>
+                </div>
+                <p class="shot__caption">
+                    One click on the menu bar icon — the running activity, the week, and everything
+                    editable in place
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Assistant and command line
+     ====================================================================== -->
+
+<section class="section section--alt" id="assistant">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-left">
+            <div class="split__text reveal">
+                <p class="eyebrow">Beyond the window</p>
+                <h3 class="h-sub">Talk your week over with something that has the numbers</h3>
+                <p>
+                    Tracktiv ships with a small command line tool and a skill in the open Agent
+                    Skills format, which Claude Code, Codex and many other assistants read. Ask how
+                    the week went and the answer is built from measured time, not from what you
+                    happen to remember.
+                </p>
+                <p>
+                    It writes as well as reads, so the tedious corrections can be spoken instead of
+                    clicked — and every change lands on the same undo stack as the app's own
+                    editing.
+                </p>
+                <ul class="facts">
+                    <li>"How did my week go, and what should I change?"</li>
+                    <li>"Rename this morning's activities to Client work."</li>
+                    <li>"I forgot to stop tracking at lunch — fix Tuesday."</li>
+                </ul>
+            </div>
+
+            <div class="reveal" style="--delay: 100ms">
+                <div class="terminal">
+                    <div class="terminal__bar" aria-hidden="true">
+                        <i></i><i></i><i></i><span>tracktivcli</span>
+                    </div>
+<pre class="terminal__body"><span class="p">$</span> <span class="c">tracktivcli status</span>
+<span class="o">Tracking   Tracktiv — DevNest Work — 1h 56m</span>
+<span class="o">Today      6h 12m of 8h over 7 activities</span>
+
+<span class="p">$</span> <span class="c">tracktivcli activity summary <span class="k">--period</span> week</span>
+<span class="o">category        duration  activities</span>
+<span class="o">Work         36h 37m 35s          56</span>
+<span class="o">DevNest Work  7h 18m 44s          34</span>
+<span class="o">Gaming         3h 44m 4s           7</span>
+
+<span class="p">$</span> <span class="c">tracktivcli activity export <span class="k">--from</span> -6d \
+      <span class="k">--to</span> today <span class="k">--format</span> csv &gt; week.csv</span></pre>
+                </div>
+                <p class="shot__caption">Part of Tracktiv Pro · the tool the skill runs, and yours to run directly</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Privacy
+     ====================================================================== -->
+
+<section class="section" id="privacy">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">Privacy</p>
+            <h2 class="h-section">A record this personal should not go anywhere</h2>
+            <p class="lead">
+                A time tracker sees your whole working day. That is exactly why this one was built
+                without the means to send any of it anywhere.
+            </p>
+        </div>
+
+        <div class="cards">
+            <div class="card reveal">
+                <h4>No network, by construction</h4>
+                <p>
+                    Tracktiv is not built with the network entitlement, so macOS would refuse to
+                    let it reach the internet even if it tried. No account, no server, no sync, no
+                    analytics.
+                </p>
+            </div>
+            <div class="card reveal" style="--delay: 70ms">
+                <h4>The title, not the screen</h4>
+                <p>
+                    It asks macOS what the frontmost window is called and looks at nothing else.
+                    The one exception is a trigger you set up for an app that reports no title —
+                    then it reads that title bar, on your Mac, and stores neither the image nor the
+                    text.
+                </p>
+            </div>
+            <div class="card reveal" style="--delay: 140ms">
+                <h4>Nobody is watching over you</h4>
+                <p>
+                    There is no team dashboard, no manager view and no shared report. Tracktiv is
+                    written for the person using it, and it has no second audience.
+                </p>
+            </div>
+            <div class="card reveal" style="--delay: 210ms">
+                <h4>Reviewed by Apple</h4>
+                <p>
+                    Tracktiv ships only through Apple: TestFlight now, the Mac App Store later.
+                    Every build is reviewed and its permissions are on record — you do not have to
+                    take our word for it.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Odds and ends
+     ====================================================================== -->
+
+<section class="section section--alt" id="more">
+    <div class="wrap wrap--wide">
+        <div class="split split--wide-right split--top">
+            <div class="split__text reveal">
+                <p class="eyebrow">And a few more things</p>
+                <h3 class="h-sub">Small, and worth having</h3>
+                <p>
+                    Categories are yours to name, colour and pick a symbol for, and the symbol
+                    turns up everywhere that category's time does — in the list, in the graph, in
+                    the totals.
+                </p>
+                <ul class="facts">
+                    <li><b>Keyboard, not mouse.</b> Global shortcuts open the day, start a new
+                        activity, or drop the cursor into the name of the one that is running.</li>
+                    <li><b>It tells you when it switched.</b> A notification whenever Tracktiv
+                        changed the activity instead of you. The switches you make yourself pass
+                        without a word.</li>
+                    <li><b>Four languages.</b> English, German, Hungarian and Slovak, following
+                        whatever your Mac is set to.</li>
+                    <li><b>It stays out of the way.</b> No Dock icon, no window in your way, no
+                        daily nag.</li>
+                </ul>
+            </div>
+
+            <div class="split__media reveal" style="--delay: 100ms">
+                <div class="mat">
+                    <div class="shot shot--detail" style="--w: 463px">
+                        <img src="/assets/img/apps/tracktiv/crop-categories.webp"
+                             alt="The category list in Tracktiv's settings: each with its own colour and symbol, the built-in ones marked with a lock"
+                             width="925" height="790" loading="lazy">
+                    </div>
+                </div>
+                <p class="shot__caption">Your own categories, and the built-in ones you cannot delete</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Pricing
+     ====================================================================== -->
+
+<section class="section" id="pricing">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">Pricing</p>
+            <h2 class="h-section">Free to use. Pro to look back.</h2>
+            <p class="lead">
+                Tracking, editing, rules and export stay free — for everything you have. The one
+                thing Pro changes is how far back the app will show you, and it is a single
+                purchase, not a subscription.
+            </p>
+        </div>
+
+        <div class="plans">
+            <div class="plan reveal">
+                <p class="plan__name">Tracktiv</p>
+                <p class="plan__price">Free<small> · no account</small></p>
+                <p class="plan__note">Everything the app does, on a rolling window of the last 14 days.</p>
+                <ul>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> Automatic tracking, with no limit on how much</li>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> Unlimited rules, meetings and games included</li>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> The whole day view, and every edit</li>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> Export of everything in view</li>
+                </ul>
+            </div>
+
+            <div class="plan plan--pro reveal" style="--delay: 90ms">
+                <p class="plan__name">Tracktiv Pro <span class="tag">One purchase</span></p>
+                <p class="plan__price">€14.99<small> · €9.99 at launch</small></p>
+                <p class="plan__note">Everything above, plus the whole record and the tools around it.</p>
+                <ul>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> Every day you have ever tracked, all the way back</li>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> Full week and month totals</li>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> <code>tracktivcli</code> and the bundled AI skill</li>
+                    <li><svg aria-hidden="true"><use href="/assets/img/icons.svg#check"></use></svg> No subscription, ever</li>
+                </ul>
+            </div>
+        </div>
+
+        <p class="lead reveal" style="margin: 2rem auto 0; font-size: .95rem; text-align: center">
+            Nothing is ever thrown away: days that leave the free window are still recorded and
+            still kept. Pro is what brings them back into view.
+        </p>
+    </div>
+</section>
+
+<!-- ======================================================================
+     Beta
+     ====================================================================== -->
+
+<section class="section section--alt" id="beta">
+    <div class="wrap wrap--wide">
+        <div class="section__head section__head--center reveal">
+            <p class="eyebrow">Beta</p>
+            <h2 class="h-section">Tracktiv is in TestFlight</h2>
+            <p class="lead">
+                The app is finished enough to live with all day, and that is exactly what the beta
+                is for. Join it, use it for a week, and tell us where it got in your way — the App
+                Store release comes after that.
+            </p>
+            <p class="lead" style="margin-top: 1rem">
+                Nothing is asked of you up front: no email address inside the app, no account, no
+                onboarding survey. A short introduction explains how to read the ring, and then it
+                is already tracking.
+            </p>
+            <div class="cta-row hero__cta">
+                <!-- TODO: swap in the public TestFlight URL -->
+                <a class="btn btn--primary" href="mailto:support@devnest.sk?subject=Tracktiv%20beta">
+                    Ask for an invite
+                    <svg aria-hidden="true"><use href="/assets/img/icons.svg#arrow"></use></svg>
+                </a>
+                <a class="btn btn--ghost" href="/support/">Support and contact</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- chrome:bottom -->
+</main>
+
+<footer class="footer">
+    <div class="wrap wrap--wide">
+        <div class="footer__grid">
+            <div class="footer__brand">
+                <a class="brand" href="/">
+                    <picture class="brand__logo">
+                        <source data-dark-source media="(prefers-color-scheme: dark)"
+                                srcset="/assets/img/brand/DevNestLogoDark.svg">
+                        <img src="/assets/img/brand/DevNestLogo.svg" alt="DevNest" width="115" height="46">
+                    </picture>
+                </a>
+                <p class="footer__line">Mac software from Slovakia</p>
+            </div>
+
+            <div class="footer__links">
+                <div>
+                    <h5>Apps</h5>
+                    <ul>
+                        <li><a href="/apps/tracktiv/">Tracktiv</a></li>
+                        <li><a href="/apps/assetscout/">AssetScout</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="/company/">About DevNest</a></li>
+                        <li><a href="/support/">Support</a></li>
+                        <li><a href="/privacy/">Privacy policy</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <span>© <span data-year>2026</span> DevNest s.r.o.</span>
+            <span class="mono">Made on a Mac, for the Mac.</span>
+        </div>
+    </div>
+</footer>
+
+<script src="/assets/js/site.js" defer></script>
+</body>
+<!-- /chrome:bottom -->
+</html>

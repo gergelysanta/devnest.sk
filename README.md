@@ -11,7 +11,7 @@ serves the folder as it is.
 
 ```
 index.html              The company: who we are, both apps, how we work
-apps/tracktiv/          Tracktiv, the current product — the longest page here
+apps/tracktiv/          Tracktiv, not finished yet — a short teaser for now
 apps/assetscout/        AssetScout, the current product
 apps/assetscout/docs/   Its manual — 22 pages, generated skeleton, hand-written prose
 company/                DevNest s.r.o. and the imprint
@@ -27,6 +27,7 @@ assets/fonts/           Instrument Sans and IBM Plex Mono, with their licences
 tools/chrome.py         Writes every part that repeats: see "One place for everything"
 tools/shot.swift        Photographs a section of the site without a browser window
 tools/og.swift          Redraws assets/img/brand/og.png, the link preview card
+drafts/                 Written but not shown yet: the full Tracktiv page. Not uploaded
 ```
 
 ## Looking at it locally
@@ -216,11 +217,12 @@ swiftc -O tools/og.swift -o /tmp/og && /tmp/og assets/img/brand/og.png
 
 Four things are still open:
 
-1. **The TestFlight link.** The beta buttons on the Tracktiv page point at
+1. **The TestFlight link.** The beta buttons on the full Tracktiv page point at
    `mailto:support@devnest.sk`. Swap in the public TestFlight URL — it appears
-   twice, in the hero and in `#beta`.
-2. **The screenshots contain real data.** Tracktiv's show tracked time, with
-   real client and project names in it. AssetScout's inspector figure prints the
+   twice, in the hero and in `#beta`. That page waits in `drafts/` for now.
+2. **The screenshots contain real data.** The older Tracktiv captures, used by
+   the page in `drafts/`, show tracked time with real client and project names
+   in it. The teaser's `window.webp` pair names only our own projects. AssetScout's inspector figure prints the
    file path of the selected picture, and that path is a folder inside the
    developer's home directory. Check both sets before publishing, and retake
    anything that should not be public.
@@ -237,7 +239,7 @@ not been read by a lawyer.
 
 ## Deploying
 
-Upload the contents of this folder to the web root. Nothing needs PHP, a database
+Upload the contents of this folder to the web root, except `drafts/`. Nothing needs PHP, a database
 or a runtime. On Cloudflare Pages: framework preset *None*, no build command,
 build output directory `/`.
 
