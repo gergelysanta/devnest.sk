@@ -42,6 +42,14 @@ python3 -m http.server 8765 --directory .
 Then open <http://localhost:8765>. `.claude/launch.json` starts the same server
 from an editor that reads it.
 
+## Deploying
+
+The site runs on Cloudflare Pages, built from this repo's `main` branch.
+Cloudflare has no way to ignore files, so `tools/build-dist.sh` copies only
+the public pages and assets into `dist/` — `drafts/`, `tools/`, `README.md`,
+`CLAUDE.md` and `.claude/` are left out. Pages runs it as the build command
+and serves `dist` as the output directory.
+
 ## One place for everything that repeats
 
 Every part that appears on more than one page is written once, and changing it
