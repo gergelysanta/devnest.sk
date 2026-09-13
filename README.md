@@ -181,7 +181,7 @@ that matches. It is a `<picture>`, so the browser fetches one file and not both:
     <source data-dark-source media="(prefers-color-scheme: dark)"
             srcset="/assets/img/apps/assetscout/window-dark.webp">
     <img src="/assets/img/apps/assetscout/window.webp" alt="…"
-         width="2190" height="1728">
+         width="2190" height="1730">
 </picture>
 ```
 
@@ -230,10 +230,10 @@ Four things are still open:
    twice, in the hero and in `#beta`. That page waits in `drafts/` for now.
 2. **The screenshots contain real data.** The older Tracktiv captures, used by
    the page in `drafts/`, show tracked time with real client and project names
-   in it. The teaser's `window.webp` pair names only our own projects. AssetScout's inspector figure prints the
-   file path of the selected picture, and that path is a folder inside the
-   developer's home directory. Check both sets before publishing, and retake
-   anything that should not be public.
+   in it. The teaser's `window.webp` pair names only our own projects. AssetScout's
+   captures were retaken on sample media, and the inspector prints the path
+   under a made-up `/Users/johndoe`. Check both sets before publishing, and
+   retake anything that should not be public.
 3. **The App Store link.** Every AssetScout badge points at
    `https://apps.apple.com/app/assetscout`, which is a guess. Swap in the real
    product URL: it is `store` in `APPS` in `tools/chrome.py`, marked `TODO`.
