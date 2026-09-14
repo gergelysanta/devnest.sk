@@ -1388,11 +1388,24 @@ a.card h4 { transition: color .2s var(--ease); }
     justify-content: space-between;
     gap: 2.2rem;
 }
+/* The 7rem is only the space between the columns. When they wrap, the rows
+   use the same 2.2rem as the rest of the footer grid. */
 .footer__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 7rem;
+    gap: 2.2rem 7rem;
     margin-right: 7rem;
+}
+/* On a phone the two link columns sit side by side under the brand, instead
+   of stacking into one long column. */
+@media (max-width: 559px) {
+    .footer__links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.2rem 1.5rem;
+        width: 100%;
+        margin-right: 0;
+    }
 }
 .footer__brand .brand { margin-bottom: .4rem; }
 .footer__line { max-width: 24ch; font-size: .87rem; color: var(--muted); }
