@@ -326,8 +326,11 @@ code { font-family: var(--font-mono); font-size: .92em; }
    -------------------------------------------------------------------------- */
 
 /* The header and the mobile sheet that opens under it are the same frosted
-   glass. */
-.nav,
+   glass. The sheet sits inside the header. So the header's glass is drawn on
+   a ::before layer behind it, not on .nav itself. A backdrop-filter on .nav
+   would stop the sheet's own blur from reaching the page. Then only the
+   semi-transparent colour is left, and the page text shows through sharp. */
+.nav::before,
 .sheet {
     background: var(--scrim);
     backdrop-filter: saturate(1.6) blur(16px);
@@ -340,7 +343,13 @@ code { font-family: var(--font-mono); font-size: .92em; }
     z-index: 60;
     height: var(--nav-h);
     border-bottom: 1px solid transparent;
-    transition: border-color .3s var(--ease), background .3s var(--ease);
+    transition: border-color .3s var(--ease);
+}
+.nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
 }
 .nav.is-stuck { border-bottom-color: var(--line); }
 
