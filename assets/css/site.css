@@ -722,6 +722,10 @@ html:not(.js) .sheet[hidden] { display: none; }
     .split--flip .split__media { order: -1; }
     .split--top { align-items: start; }
 }
+/* On a phone the two columns stack in markup order. So the text always comes
+   first in the markup, also in a flipped split, and the flip happens here.
+   With the picture first, two splits in a row put two pictures next to each
+   other, and neither says which text it belongs to. */
 .split__text h3 { margin-bottom: .9rem; }
 .split__text p { color: var(--ink-2); }
 .split__text p + p { margin-top: .9rem; }
@@ -731,8 +735,11 @@ html:not(.js) .sheet[hidden] { display: none; }
 .split__text .facts + p,
 .split__text .split__more { margin-top: 1.3rem; }
 
-/* Several splits in one section, one under the other */
-.split + .split { margin-top: clamp(3.5rem, 7vw, 6rem); }
+/* Several splits in one section, one under the other. On a phone the gap to
+   the next split must be clearly wider than the 2rem gap between a text and
+   its picture, or the picture reads as the start of the next split. 5rem is
+   chosen for that; from 1067px wide it grows to the 6rem used on a desktop. */
+.split + .split { margin-top: clamp(5rem, 9vw, 6rem); }
 
 /* --------------------------------------------------------------------------
    7. Hero
@@ -924,6 +931,18 @@ a.card h4 { transition: color .2s var(--ease); }
 .feature p  { font-size: .95rem; line-height: 1.55; color: var(--muted); }
 /* A feature that opens with a picture: the heading keeps clear of it */
 .feature > .shot + h4 { margin-top: 1.2rem; }
+
+/* Features with pictures, stacked in one column on a phone. Picture, text,
+   picture, text gives no clue which text a picture belongs to. So on a phone
+   the picture moves under its own text, and the next feature starts clearly
+   further off. The markup keeps the picture first, for the columns above
+   699px. */
+@media (max-width: 699px) {
+    .features:has(> .feature > .shot) { row-gap: 3.5rem; }
+    .feature:has(> .shot) { display: flex; flex-direction: column; }
+    .feature > .shot { order: 1; margin-top: .6rem; }
+    .feature > .shot + h4 { margin-top: 0; }
+}
 
 .facts {
     display: grid;
